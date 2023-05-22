@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<div th:fragment="asdf">
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="Untree.co" />
+  <link rel="shortcut icon" href="favicon.png" />
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap5" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+          href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="/fonts/icomoon/style.css" />
+  <link rel="stylesheet" href="/fonts/flaticon/font/flaticon.css" />
+
+  <link rel="stylesheet" href="/css/tiny-slider.css" />
+  <link rel="stylesheet" href="/css/aos.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <title>
+    Property &mdash; Free Bootstrap 5 Website Template by Untree.co
+  </title>
+
+
+  <div class="site-mobile-menu site-navbar-target">
+    <div class="site-mobile-menu-header">
+      <div class="site-mobile-menu-close">
+        <span class="icofont-close js-menu-toggle"></span>
+      </div>
+    </div>
+    <div class="site-mobile-menu-body"></div>
+  </div>
+
+  <nav class="site-nav">
+    <div class="container">
+      <div class="menu-bg-wrap">
+        <div class="site-navigation">
+          <a href="/" class="logo m-0 float-start">PARTY</a>
+
+          <ul
+                  class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end"
+          >
+            <li class="active"><a href="/members/new" sec:authorize="isAnonymous()">로그인</a></li>
+            <li class="has-children">
+              <a href="index.html" sec:authorize="isAuthenticated()" >회원</a>
+              <ul class="dropdown">
+                <li><a href="#" sec:authorize="isAnonymous()">로그인</a></li>
+                <li><a href="/members/logout" sec:authorize="isAuthenticated()">로그 아웃</a></li>
+                <li><a href="#" sec:authorize="isAuthenticated()">정보 수정</a></li>
+                <li><a href="#" sec:authorize="isAuthenticated()">예약 목록</a></li>
+                <li><a th:href="@{/members/detail/{id}(id=${session.User.id})}" sec:authorize="isAuthenticated()">마이 페이지</a></li>
+                <li><a href="/members/list" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">회원 목록 보기</a></li>
+                <li><a th:href="@{/members/update/{id}(id=${session.User.id})}" sec:authorize="isAuthenticated()">회원정보 및 수정</a></li>
+                <li><a th:href="@{/members/hostlist/{category}(category='HOST')}" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">호스트 승인 요청</a></li>
+              </ul>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+              <a class="nav-link" href="/reserves">주문 내역</a>
+            </li>
+
+            <!-- 호스트가 고객의 주문 정보를 보는 창 -->
+            <li>
+              <a th:href="@{/host/reserve/}" sec:authorize="hasAnyAuthority('ROLE_HOST')">호스트 주문 확인 내역</a>
+            </li>
+
+            <li class="has-children">
+              <a href="index.html" >상품</a>
+              <ul class="dropdown">
+                <li><a href="/admin/products/new" sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_HOST')">상품 등록</a></li>
+               <li><a th:href="@{/host/products/}" sec:authorize="hasAnyAuthority('ROLE_HOST')">호스트 상품 목록</a></li>
+                <li class="has-children">
+                  <a href="/admin/products" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">상품 목록</a>
+                  
+                  <a href="/list/products">전체 상품 목록</a>
+                  <ul class="dropdown">
+                    <li><a href="/product/{productId}">파티룸</a></li>
+                    <li><a href="#">야구장</a></li>
+                    <li><a href="#">농구장</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li class="has-children">
+              <a href="index.html">게시물</a>
+              <ul class="dropdown">
+                <li><a href="#">서비스 소개</a></li>
+                <li><a href="#">공지 사항</a></li>
+                <li><a href="#">이용 약관</a></li>
+                <li><a href="/board/list">게시판</a></li>
+                <li><a href="#">Q&A</a></li>
+                <li><a href="#">도움말</a></li>
+              </ul>
+            </li>
+          </ul>
+
+          <a
+                  href="#"
+                  class="burger light me-auto float-end mt-1 site-menu-toggle js-menu-toggle d-inline-block d-lg-none"
+                  data-toggle="collapse"
+                  data-target="#main-navbar"
+          >
+            <span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <script src="/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/tiny-slider.js"></script>
+  <script src="/js/aos.js"></script>
+  <script src="/js/navbar.js"></script>
+  <script src="/js/counter.js"></script>
+  <script src="/js/custom.js"></script>
+</div>
+</html>
