@@ -18,7 +18,6 @@ public class ProductSearchDto {
 
 	private Long id;
 
-
     public void setMemberId(Long memberId) {
     }
 

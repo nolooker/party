@@ -18,7 +18,6 @@ public class ReserveDto {
     @Max(value = 24, message = "하루 최대 이용 시간은 24시간 입니다.")
     private int count ;
 
-
     private String startTime;
 
     private String endTime;
@@ -26,7 +25,6 @@ public class ReserveDto {
     private Integer personnel ;
 
     private String req ;
-
 
     public LocalDateTime getStartTimeAsLocalDateTime() {
         if (startTime != null) {

@@ -19,4 +19,8 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
     Long countReserve(@Param("email") String email);
 
     Reserve save(Reserve reserve);
+
+    @Query("SELECT r FROM Reserve r JOIN FETCH r.member")
+    List<Reserve> findAllReservationsWithMembers();
+
 }

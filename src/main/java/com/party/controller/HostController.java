@@ -1,9 +1,14 @@
 package com.party.controller;
 
-import com.party.dto.*;
+import com.party.dto.HostProductDto;
+import com.party.dto.ProductFormDto;
+import com.party.dto.ProductImageDto;
+import com.party.dto.ProductSearchDto;
+import com.party.entity.Reserve;
 import com.party.service.MemberService;
 import com.party.service.ProductImageService;
 import com.party.service.ProductService;
+import com.party.service.ReserveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +18,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -28,7 +36,7 @@ public class HostController {
     private final ProductService productService;
     private final MemberService memberService;
     private final ProductImageService productImageService;
-
+    private final ReserveService reserveService ;
 
 
     @GetMapping(value = {"/host/products", "/host/products/{page}"})
@@ -102,30 +110,53 @@ public class HostController {
     }
 
 
-    @GetMapping("/host/reserve")
-    public String reserveManage(ProductSearchDto dto, @RequestParam(value = "page", required = false, defaultValue = "0") int page, Model model, Authentication authentication) {
-        int pageSize = 5; // 페이지당 예약 수
+//    @GetMapping("/host/reserve")
+//    public String reserveManage(ProductSearchDto dto, @RequestParam(value = "page", required = false, defaultValue = "0") int page, Model model, Authentication authentication) {
+//        int pageSize = 5; // 페이지당 예약 수
+//
+//        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//            String loggedInUsername = userDetails.getUsername();
+//
+//            // 사용자 이름을 기준으로 예약을 조회하도록 설정
+//            dto.setCreatedBy(loggedInUsername);
+//        }
+//
+//        Pageable pageable = PageRequest.of(page, pageSize);
+//        Page<HostProductDto> reserves = productService.getHostProductPage(dto, pageable);
+//
+//        model.addAttribute("reserves", reserves);
+//        model.addAttribute("searchDto", dto); // 검색 조건 유지를 위하여
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("totalPages", reserves.getTotalPages());
+//        model.addAttribute("pageSize", pageSize);
+//
+//        return "reserve/reserveList";
+//    }
+
+    @GetMapping(value = {"/reservelist", "/reservelist/{page}"})
+    public String productreservelist(ProductSearchDto dto, @PathVariable("page") Optional<Integer> page, Model model, Authentication authentication) {
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 3);
 
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String loggedInUsername = userDetails.getUsername();
 
-            // 사용자 이름을 기준으로 예약을 조회하도록 설정
             dto.setCreatedBy(loggedInUsername);
+
+            // 내가 등록한 상품에 대한 예약 목록 가져오기
+            List<Reserve> reservationList = reserveService.findReservationsByCreatedByForProducts(loggedInUsername, dto);
+
+            // 모델에 예약 목록 전달
+            model.addAttribute("reservations", reservationList);
         }
 
-        Pageable pageable = PageRequest.of(page, pageSize);
-        Page<HostProductDto> reserves = productService.getHostProductPage(dto, pageable);
-
-        model.addAttribute("reserves", reserves);
-        model.addAttribute("searchDto", dto); // 검색 조건 유지를 위하여
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", reserves.getTotalPages());
-        model.addAttribute("pageSize", pageSize);
+        Page<HostProductDto> products = productService.getHostProductPage(dto, pageable);
+        model.addAttribute("searchDto", dto);
+        model.addAttribute("maxPage", 5);
 
         return "reserve/reserveList";
     }
-
 
 }
 

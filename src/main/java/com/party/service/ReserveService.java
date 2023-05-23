@@ -5,9 +5,9 @@ import com.party.dto.ReserveHistDto;
 import com.party.dto.ReserveProductDto;
 import com.party.entity.*;
 import com.party.repository.MemberRepository;
-import com.party.repository.ReserveRepository;
 import com.party.repository.ProductImageRepository;
 import com.party.repository.ProductRepository;
+import com.party.repository.ReserveRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,6 +28,7 @@ public class ReserveService {
     private final ProductRepository productRepository ;
     private final MemberRepository memberRepository ;
     private final ReserveRepository reserveRepository ;
+    private final ProductService productService ;
 
     // email 정보와 주문 정보(ReserveDto)를 이용하여 주문 로직을 구합니다.
     public Long reserve(ReserveDto reserveDto, String email){
@@ -131,4 +132,9 @@ public class ReserveService {
 
         return reserve.getId();
     }
+
+    public List<Reserve> findAllReservationsWithMembers() {
+        return reserveRepository.findAllReservationsWithMembers();
+    }
+
 }
