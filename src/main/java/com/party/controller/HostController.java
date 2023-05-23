@@ -110,29 +110,6 @@ public class HostController {
     }
 
 
-//    @GetMapping("/host/reserve")
-//    public String reserveManage(ProductSearchDto dto, @RequestParam(value = "page", required = false, defaultValue = "0") int page, Model model, Authentication authentication) {
-//        int pageSize = 5; // 페이지당 예약 수
-//
-//        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//            String loggedInUsername = userDetails.getUsername();
-//
-//            // 사용자 이름을 기준으로 예약을 조회하도록 설정
-//            dto.setCreatedBy(loggedInUsername);
-//        }
-//
-//        Pageable pageable = PageRequest.of(page, pageSize);
-//        Page<HostProductDto> reserves = productService.getHostProductPage(dto, pageable);
-//
-//        model.addAttribute("reserves", reserves);
-//        model.addAttribute("searchDto", dto); // 검색 조건 유지를 위하여
-//        model.addAttribute("currentPage", page);
-//        model.addAttribute("totalPages", reserves.getTotalPages());
-//        model.addAttribute("pageSize", pageSize);
-//
-//        return "reserve/reserveList";
-//    }
 
     @GetMapping(value = {"/reservelist", "/reservelist/{page}"})
     public String productreservelist(ProductSearchDto dto, @PathVariable("page") Optional<Integer> page, Model model, Authentication authentication) {
@@ -142,12 +119,14 @@ public class HostController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String loggedInUsername = userDetails.getUsername();
 
+
             dto.setCreatedBy(loggedInUsername);
 
-            // 내가 등록한 상품에 대한 예약 목록 가져오기
-            List<Reserve> reservationList = reserveService.findReservationsByCreatedByForProducts(loggedInUsername, dto);
 
-            // 모델에 예약 목록 전달
+            // 예약 목록과 회원 정보 가져오기
+            List<Reserve> reservationList = reserveService.findAllReservationsWithMembers();
+
+            // 모델에 예약 목록과 회원 정보 전달
             model.addAttribute("reservations", reservationList);
         }
 
@@ -157,6 +136,5 @@ public class HostController {
 
         return "reserve/reserveList";
     }
-
 }
 
