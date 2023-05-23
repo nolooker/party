@@ -46,7 +46,10 @@ public class Reserve extends BaseEntity {
 
     private LocalDateTime orderDate; // 주문 시간
 
-
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "product_register_id")
+//    private Member productRegister;  // 상품을 등록한 사람(productRegister)
 
 
     // could not resolve property: reserveDate of: com.party.entity.Reserve
@@ -97,6 +100,56 @@ public class Reserve extends BaseEntity {
         // 현재 시간 반환 또는 다른 기본값을 반환
         return Objects.requireNonNullElseGet(orderDate, LocalDateTime::now);
     }
+//
+//    private Long memberId;
+//    private String memberName;
+//    private String memberEmail;
+//    private String memberPhone;
+//
+//
+//    public void setMemberData(Member member) {
+//        this.memberId = member.getId();
+//        this.memberName = member.getName();
+//        this.memberEmail = member.getEmail();
+//        this.memberPhone = member.getPhone();
+//    }
+//
+//    public static Reserve createreserve(Member member, List<ReserveProduct> reserveProductList, LocalDateTime startTime, LocalDateTime endTime, Integer personnel, String req, Member productRegister) {
+//        Reserve reserve = new Reserve();
+//        reserve.setMember(member);
+//        reserve.setProductRegister(productRegister);
+//        reserve.setStartTime(startTime);
+//        reserve.setEndTime(endTime);
+//        reserve.setPersonnel(personnel);
+//        reserve.setReq(req);
+//        reserve.setReserveStatus(ReserveStatus.ORDER);
+//        reserve.setOrderDate(LocalDateTime.now());
+//
+//        reserve.setMemberData(member);
+//
+//        for (ReserveProduct bean : reserveProductList) {
+//            reserve.addReserveProduct(bean);
+//        }
+//
+//        return reserve;
+//    }
+//
+//    public Member getProductRegister() {
+//        return this.productRegister;
+//    }
+//
+//    public String getProductRegisterName() {
+//        return this.productRegister.getName();
+//    }
+//
+//    public String getProductRegisterEmail() {
+//        return this.productRegister.getEmail();
+//    }
+//
+//    public String getProductRegisterPhone() {
+//        return this.productRegister.getPhone();
+//    }
+//
 
 
 }

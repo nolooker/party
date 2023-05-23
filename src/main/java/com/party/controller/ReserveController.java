@@ -88,4 +88,24 @@ public class ReserveController {
             return new ResponseEntity<String>("주문 취소 권한이 없습니다.", HttpStatus.FORBIDDEN) ;
         }
     }
+
+
+//
+//    @GetMapping("/reservations/{reservationId}")
+//    public String viewReservation(@PathVariable("reservationId") Long reservationId, Model model, Principal principal) {
+//        // 주문 ID와 현재 사용자의 정보를 기반으로 예약 내역을 조회합니다.
+//        boolean hasPermission = reserveService.validateReserve(reservationId, principal.getName());
+//        if (!hasPermission) {
+//            // 예약 내역 조회 권한이 없는 경우 예외 처리합니다.
+//            throw new AccessDeniedException("주문 조회 권한이 없습니다.");
+//        }
+//
+//        Reserve reserve = reserveService.findReservationById(reservationId);
+//        model.addAttribute("reservation", reserve);
+//
+//        return "reserve/reserveList";
+//    }
+
+
+
 }

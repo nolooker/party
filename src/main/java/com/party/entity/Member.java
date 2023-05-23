@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "members")
-@Getter@Setter@ToString
+@Getter @Setter @ToString
 @EntityListeners(value = {AuditingEntityListener.class})
 public class Member extends BaseEntity  {
 

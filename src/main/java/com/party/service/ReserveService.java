@@ -133,8 +133,13 @@ public class ReserveService {
         return reserve.getId();
     }
 
+    // 상품 등록자와 주문한 회원 정보가 함께 조회되는 주문 목록을 반환합니다.
     public List<Reserve> findAllReservationsWithMembers() {
         return reserveRepository.findAllReservationsWithMembers();
     }
 
+//    public Reserve findReservationById(Long reservationId) {
+//        return reserveRepository.findById(reservationId)
+//                .orElseThrow(() -> new EntityNotFoundException("예약을 찾을 수 없습니다. reservationId: " + reservationId));
+//    }
 }

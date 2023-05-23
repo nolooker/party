@@ -33,8 +33,5 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Queryds
             "%:description% order by i.price desc ",nativeQuery = true)
     List<Product> findByProductDetail02(@Param("description") String description);
 
-    @Query("SELECT p.id FROM Product p WHERE p.createdBy = :loggedInUsername")
-    List<Long> findProductIdsByCreatedBy(@Param("loggedInUsername") String loggedInUsername);
-
 }
 
