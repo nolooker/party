@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/mylayout}">
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
+        $(document).ready(function(){ /* 검색 button click */
+            $("#searchBtn").on("click",function(e) {
+                e.preventDefault();
+                page(0);
+            });
+        });
+
+        function page(page){
+            var searchDateType = $("#searchDateType").val();
+            var reviewStatus = $("#reviewStatus").val();
+            var searchBy = $("#searchBy").val();
+            var searchQuery = $("#searchQuery").val();
+
+            location.href="/my/reviews/" + page + "?searchDateType=" + searchDateType
+            + "&reviewStatus=" + reviewStatus
+            + "&searchBy=" + searchBy
+            + "&searchQuery=" + searchQuery;
+        }
+
+
+    </script>
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+  <style>
+        select{
+            margin-right:10px;
+        }
+    </style>
+</th:block>
+
+<div class="content" layout:fragment="content">
+  <form th:action="@{'/my/reviews/' + ${reviews.number}}" role="form"
+        method="get" th:object="${reviews}">
+    <!-- /* 데이터 목록  */ -->
+    <table class="table">
+      <thead>
+      <tr>
+        <td>NO.</td>
+        <td>이름</td>
+        <td>제목</td>
+        <td>이용후기 설명</td>
+        <td>등록자</td>
+        <td>등록일</td>
+        <td>수정</td>
+        <td>삭제</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="bean, status: ${reviews.getContent()}">
+        <td th:text="${bean.id}"></td>
+        <td>
+          <a  th:text="${bean.name}"></a>
+        </td>
+        <td th:text="${bean.title}"></td>
+        <td th:text="${bean.description}"></td>
+        <td th:text="${bean.createBy}"></td>
+        <td th:text="${#temporals.format(bean.regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td>
+          <!-- 수정 버튼 -->
+          <button type="submit">
+            <a th:href="@{'/my/review/'+ ${bean.id}}">수정하기</a>
+          </button>
+        </td>
+        <td>
+          <!-- 삭제 버튼 -->
+          <form method="POST" th:action="@{'/my/review/delete/'+${bean.id}}"
+                onsubmit="return confirm('이용후기를 삭제하시겠습니까?');">
+          <button type="submit">삭제</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- /* 페이지 네이션 */ -->
+    <div th:with="start=${(reviews.number/maxPage)*maxPage + 1}, end=(${(reviews.totalPages == 0) ? 1 : (start + (maxPage - 1) < reviews.totalPages ? start + (maxPage - 1) : reviews.totalPages)})" >
+      <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${reviews.first}?'disabled'">
+          <a th:onclick="'javascript:page(' + ${reviews.number - 1} + ')'" aria-label='Previous' class="page-link">
+            <span aria-hidden='true'>Previous</span>
+          </a>
+        </li>
+        <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${reviews.number eq page-1}?'active':''">
+          <a th:onclick="'javascript:page(' + ${page - 1} + ')'" th:inline="text" class="page-link">[[${page}]]</a>
+        </li>
+        <li class="page-item" th:classappend="${reviews.last}?'disabled'">
+          <a th:onclick="'javascript:page(' + ${reviews.number + 1} + ')'" aria-label='Next' class="page-link">
+            <span aria-hidden='true'>Next</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- /* 필드 검색 */ -->
+    <div class="form-inline justify-content-center" th:object="${searchDto}">
+      <select th:field="*{searchDateType}" class="form-control" style="width:auto;">
+        <option value="all">전체 기간</option>
+        <option value="1d">1일</option>
+        <option value="1w">1주</option>
+        <option value="1m">1달</option>
+        <option value="6m">6달</option>
+      </select>
+      <select th:field="*{reviewStatus}" class="form-control" style="width:auto;">-->
+        <option value="">전체 보기</option>
+        <option value="SELL">판매</option>
+        <option value="SOLD_OUT">품절</option>
+      </select>
+      <select th:field="*{searchBy}" class="form-control" style="width:auto;">
+        <option value="name">상품명</option>
+        <option value="createdBy">등록자</option>
+      </select>
+      <input th:field="*{searchQuery}" class="form-control" type="text" placeholder="검색어를 입력해 주세요.">
+      <button id="searchBtn" type="submit" class="btn btn-primary">검색</button>
+    </div>
+  </form>
+</div>
+</html>

@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/mylayout}">
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
+
+        $(document).ready(function(){ /* 검색 button click */
+            $("#searchBtn").on("click",function(e) {
+                e.preventDefault();
+                page(0);
+            });
+        });
+
+        function page(page){
+            var searchDateType = $("#searchDateType").val();
+            var searchBy = $("#searchBy").val();
+            var searchQuery = $("#searchQuery").val();
+
+            location.href="/list/reviews/" + page + "?searchDateType=" + searchDateType
+            + "&searchBy=" + searchBy
+            + "&searchQuery=" + searchQuery;
+        }
+
+    </script>
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+  <style>
+        select{
+            margin-right:10px;
+        }
+    </style>
+</th:block>
+
+
+<div class="row">
+  <div th:each="bean : ${reviews.getContent()}" class="col-md-4 margin">
+    <div class="property-item">
+      <a th:href="'/review/' + ${bean.id}" class="img">
+        <!-- bean의 imageUrl 속성을 사용하여 이미지 출력 -->
+        <img th:src="${bean.imageUrl}" th:alt="${bean.name}" class="img-fluid" height="300" width="300" />
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="content" layout:fragment="content">
+  <div class="row">
+    <div class="col-md-4" th:each="bean, status: ${reviews.getContent()}" th:if="${status.index < 9}">
+      <div class="card">
+
+          <img th:src="${bean.imageUrl}" th:alt="${bean.name}" class="card-img-top" />
+
+        <div class="card-body">
+          <h5 class="card-title" th:text="${bean.title}"></h5>
+          <p class="card-text" th:text="${bean.description}"></p>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted" th:text="${bean.name}"></small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <br><br>
+
+  <!-- 페이지 네이션 -->
+  <div th:with="start=${(reviews.number/maxPage)*maxPage + 1}, end=(${(reviews.totalPages == 0) ? 1 : (start + (maxPage - 1) < reviews.totalPages ? start + (maxPage - 1) : reviews.totalPages)})">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" th:classappend="${reviews.first}?'disabled'">
+        <a th:onclick="'javascript:page(' + ${reviews.number - 1} + ')'" aria-label='Previous' class="page-link">
+          <span aria-hidden='true'>Previous</span>
+        </a>
+      </li>
+      <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${reviews.number eq page-1}?'active':''">
+        <a th:onclick="'javascript:page(' + ${page - 1} + ')'" th:inline="text" class="page-link">[[${page}]]</a>
+      </li>
+      <li class="page-item" th:classappend="${reviews.last}?'disabled'">
+        <a th:onclick="'javascript:page(' + ${reviews.number + 1} + ')'" aria-label='Next' class="page-link">
+          <span aria-hidden='true'>Next</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+</html>
