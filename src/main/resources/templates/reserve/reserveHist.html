@@ -90,10 +90,6 @@
       <h4 th:text="${reserve.reserveDate} + ' 주문날짜'"></h4>
       <h4 th:text="${reserve.startTime} + ' 파티룸 사용 시간'"></h4>
       <h4 th:text="${reserve.endTime} + ' 파티룸 종료 시간'"></h4>
-
-      <h4 th:text="${reserve.personnel} + ' 사용 인원'"></h4>
-      <h4 th:text="${reserve.req} + ' 요구사항 정보'"></h4>
-
       <th:block th:if="${reserve.reserveStatus == T(com.party.constant.ReserveStatus).ORDER}">
         <button type="button" class="btn btn-online-secondary" th:value="${reserve.reserveId}"
                 onclick="cancelReserve(this.value)">

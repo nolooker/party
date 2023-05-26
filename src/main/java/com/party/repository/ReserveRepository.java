@@ -20,7 +20,26 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
 
     Reserve save(Reserve reserve);
 
-    @Query("SELECT r FROM Reserve r JOIN FETCH r.member")
-    List<Reserve> findAllReservationsWithMembers();
+
+    @Query("SELECT r FROM Reserve r JOIN FETCH r.member WHERE r.createBy = :sessionId")
+    List<Reserve> findAllReservationsWithMembersByCreateBy(@Param("sessionId") String sessionId);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
+
+
+
+
+

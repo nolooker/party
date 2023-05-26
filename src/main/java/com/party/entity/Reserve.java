@@ -14,7 +14,7 @@ import java.util.Objects;
 @Entity
 @Table(name="reserve")
 @Getter @Setter @ToString
-public class Reserve extends BaseEntity {
+public class Reserve extends BaseEntity2 {
 
     @Id
     @Column(name = "reserve_id")
@@ -25,6 +25,7 @@ public class Reserve extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id")
     private Member member ;
+
 
     // mappedBy = "reserve"의 reserve는 OrderProduct 클래스에 들어 있는 변수의 이름입니다.
     @OneToMany(mappedBy = "reserve", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -46,10 +47,17 @@ public class Reserve extends BaseEntity {
 
     private LocalDateTime orderDate; // 주문 시간
 
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "product_register_id")
-//    private Member productRegister;  // 상품을 등록한 사람(productRegister)
+    @Column(name = "create_by")
+    private String createBy;
+
+//    @PrePersist
+//    private void prePersist() {
+//        if (getCreateBy() != null) {
+//            setCreateBy(product.getCreateBy());
+//        }
+//    }
+
+
 
 
     // could not resolve property: reserveDate of: com.party.entity.Reserve
@@ -58,12 +66,14 @@ public class Reserve extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ReserveStatus reserveStatus ;
 
+
+
     public void addReserveProduct(ReserveProduct reserveProduct){
         reserveProducts.add(reserveProduct);
         reserveProduct.setReserve(this);
     }
 
-    public static Reserve createreserve(Member member, List<ReserveProduct> reserveProductList,LocalDateTime startTime, LocalDateTime endTime, Integer personnel, String req ){
+    public static Reserve createreserve(Member member,Product product, List<ReserveProduct> reserveProductList,LocalDateTime startTime, LocalDateTime endTime,Integer personnel, String req){
         Reserve reserve = new Reserve();
         reserve.setMember(member);
 
@@ -75,6 +85,9 @@ public class Reserve extends BaseEntity {
         reserve.setPersonnel(reserve.getPersonnel());  // check
         reserve.setReq(reserve.getReq()); // check
         reserve.setOrderDate(LocalDateTime.now());
+        reserve.setCreateBy(product.getCreateBy());
+
+
 
         return reserve ;
     }
@@ -100,56 +113,7 @@ public class Reserve extends BaseEntity {
         // 현재 시간 반환 또는 다른 기본값을 반환
         return Objects.requireNonNullElseGet(orderDate, LocalDateTime::now);
     }
-//
-//    private Long memberId;
-//    private String memberName;
-//    private String memberEmail;
-//    private String memberPhone;
-//
-//
-//    public void setMemberData(Member member) {
-//        this.memberId = member.getId();
-//        this.memberName = member.getName();
-//        this.memberEmail = member.getEmail();
-//        this.memberPhone = member.getPhone();
-//    }
-//
-//    public static Reserve createreserve(Member member, List<ReserveProduct> reserveProductList, LocalDateTime startTime, LocalDateTime endTime, Integer personnel, String req, Member productRegister) {
-//        Reserve reserve = new Reserve();
-//        reserve.setMember(member);
-//        reserve.setProductRegister(productRegister);
-//        reserve.setStartTime(startTime);
-//        reserve.setEndTime(endTime);
-//        reserve.setPersonnel(personnel);
-//        reserve.setReq(req);
-//        reserve.setReserveStatus(ReserveStatus.ORDER);
-//        reserve.setOrderDate(LocalDateTime.now());
-//
-//        reserve.setMemberData(member);
-//
-//        for (ReserveProduct bean : reserveProductList) {
-//            reserve.addReserveProduct(bean);
-//        }
-//
-//        return reserve;
-//    }
-//
-//    public Member getProductRegister() {
-//        return this.productRegister;
-//    }
-//
-//    public String getProductRegisterName() {
-//        return this.productRegister.getName();
-//    }
-//
-//    public String getProductRegisterEmail() {
-//        return this.productRegister.getEmail();
-//    }
-//
-//    public String getProductRegisterPhone() {
-//        return this.productRegister.getPhone();
-//    }
-//
+
 
 
 }

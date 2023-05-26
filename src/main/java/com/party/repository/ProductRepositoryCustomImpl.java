@@ -5,6 +5,7 @@ import com.party.dto.*;
 import com.party.entity.Product;
 import com.party.entity.QProduct;
 import com.party.entity.QProductImage;
+import com.party.entity.QReserve;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -39,7 +40,8 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom{
                                 product.useTime,
                                 productImage.imageUrl,
                                 product.price,
-                                product.productStatus
+                                product.productStatus,
+                                product.address
                         )
                 )
                 .from(productImage)
@@ -71,6 +73,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom{
                 String sessionId = user.getUsername(); // 로그인한 유저의 id 값을 가져옵니다.
 
                 QProduct product = QProduct.product;
+                QReserve reserve=QReserve.reserve;
                 QProductImage productImage = QProductImage.productImage;
                 QueryResults<HostProductDto> results = this.queryFactory
                         .select(
@@ -82,7 +85,8 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom{
                                         product.useTime,
                                         productImage.imageUrl,
                                         product.price,
-                                        product.productStatus
+                                        product.productStatus,
+                                        product.address
                                 )
                         )
                         .from(productImage)
@@ -106,6 +110,9 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom{
         // 로그인하지 않은 경우 빈 페이지를 반환하거나 예외 처리 등을 수행할 수 있습니다.
         return new PageImpl<>(Collections.emptyList());
     }
+
+
+
 
 
     private BooleanExpression likeCondition(String searchQuery) {
@@ -141,8 +148,8 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom{
     private BooleanExpression searchByCondition(String searchBy, String searchQuery) {
         if(StringUtils.equals("name",searchBy)){ //상품 이름으로 검색
             return QProduct.product.name.like("%"+searchQuery+"%");
-        }else if (StringUtils.equals("createBy",searchBy)){ // 상품 등록자로 검색
-            return QProduct.product.createBy.like("%"+searchQuery+"%");
+        }else if (StringUtils.equals("address",searchBy)){ // 주소로검색
+            return QProduct.product.address.like("%"+searchQuery+"%");
 
         }
         return null;

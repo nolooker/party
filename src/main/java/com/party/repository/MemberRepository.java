@@ -1,6 +1,5 @@
 package com.party.repository;
 
-import com.party.constant.Role;
 import com.party.dto.MemberDto;
 import com.party.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +13,7 @@ import java.util.List;
 public interface MemberRepository extends JpaRepository<Member, String> {
     // 이메일을 이용하여 회원 정보 조회
     Member findByEmail(String email);
+
 
     Member findById(Long id);
 
@@ -33,5 +33,9 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     @Modifying
     @Query("UPDATE Member m SET m.role = 'HOST' WHERE m.category = 'host' AND m.id = :id")
     void updateHostRole(@Param("id") Long id);
+
+
+
+
 
 }

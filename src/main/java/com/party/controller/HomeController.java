@@ -1,24 +1,33 @@
 package com.party.controller;
 
+import com.party.dto.MainProductDto;
 import com.party.dto.MemberDto;
+import com.party.dto.ProductSearchDto;
 import com.party.repository.MemberRepository;
+import com.party.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final MemberRepository memberRepository ;
+    private final MemberRepository memberRepository;
+    private final ProductService productService;
 
     @RequestMapping(value = "/")
-    public String main(HttpSession session) {
+    public String main(HttpSession session, ProductSearchDto dto, Optional<Integer> page, Model model) {
         String sessionId = "User";
         if (session.getAttribute(sessionId) == null) { // 세션 영역에 데이터가 없을 때만 세션에 바인딩 합니다.
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -41,6 +50,19 @@ public class HomeController {
                 }
             }
         }
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 100);
+
+        if (dto.getSearchQuery() == null) {
+            dto.setSearchQuery("");
+        }
+
+        Page<MainProductDto> products = productService.getMainProductPage(dto, pageable);
+
+        model.addAttribute("products", products);
+
+
         return "main";
+
     }
+
 }

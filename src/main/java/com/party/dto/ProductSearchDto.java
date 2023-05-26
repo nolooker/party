@@ -18,10 +18,13 @@ public class ProductSearchDto {
 
 	private Long id;
 
+
     public void setMemberId(Long memberId) {
     }
 
 
     public void setCreatedBy(String loggedInUsername) {
     }
+
+
 }

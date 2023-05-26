@@ -5,6 +5,7 @@ import com.party.dto.ProductFormDto;
 import com.party.dto.ProductImageDto;
 import com.party.dto.ProductSearchDto;
 import com.party.entity.Reserve;
+import com.party.repository.ReserveRepository;
 import com.party.service.MemberService;
 import com.party.service.ProductImageService;
 import com.party.service.ProductService;
@@ -36,12 +37,14 @@ public class HostController {
     private final ProductService productService;
     private final MemberService memberService;
     private final ProductImageService productImageService;
-    private final ReserveService reserveService ;
+    private final ReserveService reserveService;
+    private final ReserveRepository reserveRepository;
+
 
 
     @GetMapping(value = {"/host/products", "/host/products/{page}"})
     public String productManage(ProductSearchDto dto, @PathVariable("page") Optional<Integer> page, Model model, Authentication authentication) {
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 3);
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
 
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -49,9 +52,12 @@ public class HostController {
 
             // 사용자 이름을 기준으로 상품을 조회하도록 설정
             dto.setCreatedBy(loggedInUsername);
+
+
         }
 
         Page<HostProductDto> products = productService.getHostProductPage(dto, pageable);
+
 
         model.addAttribute("products", products);
         model.addAttribute("searchDto", dto); // 검색 조건 유지를 위하여
@@ -110,7 +116,6 @@ public class HostController {
     }
 
 
-
     @GetMapping(value = {"/reservelist", "/reservelist/{page}"})
     public String productreservelist(ProductSearchDto dto, @PathVariable("page") Optional<Integer> page, Model model, Authentication authentication) {
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 3);
@@ -124,7 +129,7 @@ public class HostController {
 
 
             // 예약 목록과 회원 정보 가져오기
-            List<Reserve> reservationList = reserveService.findAllReservationsWithMembers();
+            List<Reserve> reservationList = reserveService.findAllReservationsWithMembersByCreateBy(loggedInUsername);
 
             // 모델에 예약 목록과 회원 정보 전달
             model.addAttribute("reservations", reservationList);
@@ -136,5 +141,7 @@ public class HostController {
 
         return "reserve/reserveList";
     }
+
+
 }
 

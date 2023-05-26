@@ -27,16 +27,17 @@ public class ReserveProduct extends BaseEntity{
 
     private int count ; // 시간을 수량으로 계산
 
-    private LocalDateTime startTime;
-
-    private LocalDateTime endTime;
 
     private Integer personnel; // 인원수
 
     private String req; // 요청사항
 
 
-    public static ReserveProduct createReserveProduct(Product product, int count ,LocalDateTime startTime, LocalDateTime endTime, int personnel, String req ) {
+    private LocalDateTime startTime;
+
+    private LocalDateTime endTime;
+
+    public static ReserveProduct createReserveProduct(Product product, int count,LocalDateTime startTime, LocalDateTime endTime,Integer personnel,String req) {
 
         ReserveProduct reserveProduct = new ReserveProduct();
         reserveProduct.setProduct(product);

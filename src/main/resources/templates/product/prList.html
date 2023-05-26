@@ -59,7 +59,7 @@
       <thead>
       <tr>
         <td>파티룸</td>
-        <td>등록 번호</td>
+        <td>파티룸 주소</td>
         <td>상품명</td>
         <td>인원수</td>
         <td>가격</td>
@@ -79,7 +79,8 @@
           </a>
         </td>
 
-        <td th:text="${bean.id}"></td>
+
+        <td th:text="${bean.address}"></td>
 
         <td th:text="${bean.name}"></td>
 
@@ -138,10 +139,12 @@
         <option value="RESERVE">예약가능</option>
         <option value="NOT_RESERVE">예약불가</option>
       </select>
-      <!--        <select th:field="*{searchBy}" class="form-control" style="width:auto;">-->
-      <!--          <option value="name">상품명</option>-->
-      <!--&lt;!&ndash;          <option value="createdBy">등록자</option>&ndash;&gt;-->
-      <!--        </select>-->
+
+      <select th:field="*{searchBy}" class="form-control" style="width:auto;">
+
+        <option value="address">주소</option>
+      </select>
+
       <input th:field="*{searchQuery}" class="form-control" type="text" placeholder="검색어를 입력해 주세요.">
       <button id="searchBtn" type="submit" class="btn btn-primary">검색</button>
     </div>

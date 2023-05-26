@@ -21,9 +21,9 @@ public class ReserveHistDto {
     // 종료 시간
     private String endTime;
 
-    private Integer personnel ;
+    private Integer personnel;
 
-    private String req ;
+    private String req;
 
     // 주문 상품 리스트
     private List<ReserveProductDto> reserveProductDtoList = new ArrayList<>() ;
@@ -34,14 +34,14 @@ public class ReserveHistDto {
 
     public ReserveHistDto(Reserve reserve) {
         this.reserveId = reserve.getId() ;
+        this.personnel=reserve.getPersonnel();
+        this.req=reserve.getReq();
 
 
         String pattern = "yyyy-MM-dd HH:mm" ;
         this.reserveDate =reserve.getorderDate().format(DateTimeFormatter.ofPattern(pattern));
         this.startTime=reserve.getStartTime().format(DateTimeFormatter.ofPattern(pattern));
         this.endTime=reserve.getEndTime().format(DateTimeFormatter.ofPattern(pattern));
-        this.personnel=reserve.getPersonnel();
-        this.req=reserve.getReq();
 
 
         this.reserveStatus = reserve.getReserveStatus() ;

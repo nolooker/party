@@ -28,39 +28,35 @@ public class ReserveService {
     private final ProductRepository productRepository ;
     private final MemberRepository memberRepository ;
     private final ReserveRepository reserveRepository ;
-    private final ProductService productService ;
+
 
     // email 정보와 주문 정보(ReserveDto)를 이용하여 주문 로직을 구합니다.
-    public Long reserve(ReserveDto reserveDto, String email){
+    public synchronized Long reserve(ReserveDto reserveDto, String email){
         // 어떤 상품인가요?
         Product product = productRepository.findById(reserveDto.getProductId())
                 .orElseThrow(EntityNotFoundException::new);
         Member member = memberRepository.findByEmail(email) ;
         List<ReserveProduct> reserveProductList = new ArrayList<>() ;
-        ReserveProduct reserveProduct = ReserveProduct.createReserveProduct(product, reserveDto.getCount(),reserveDto.getStartTimeAsLocalDateTime(), reserveDto.getEndTimeAsLocalDateTime(), reserveDto.getPersonnel(), reserveDto.getReq());
+        ReserveProduct reserveProduct = ReserveProduct.createReserveProduct(product, reserveDto.getCount(),reserveDto.getStartTimeAsLocalDateTime(), reserveDto.getEndTimeAsLocalDateTime(),reserveDto.getPersonnel(),reserveDto.getReq());
         reserveProductList.add(reserveProduct);
 
         LocalDateTime startTime = reserveDto.getStartTimeAsLocalDateTime();
         LocalDateTime endTime = startTime.plusHours(reserveDto.getCount());
+        Integer personnel=reserveDto.getPersonnel();
+        String req=reserveDto.getReq();
 
-        Integer personnel = reserveDto.getPersonnel();
-        String req = reserveDto.getReq();
 
-        Reserve reserve = Reserve.createreserve(member, reserveProductList,startTime,endTime, personnel, req) ;
+        Reserve reserve = Reserve.createreserve(member,product, reserveProductList,startTime,endTime,personnel,req) ;
         reserve.setMember(member);
         reserve.setReserveProducts(reserveProductList);
         reserve.setStartTime(startTime);
         reserve.setEndTime(endTime);
         reserve.setPersonnel(personnel);
         reserve.setReq(req);
-
+        reserve.setCreateBy(product.getCreateBy());
         reserveRepository.save(reserve) ;
         return reserve.getId();
     }
-
-
-
-
     private final ProductImageRepository productImageRepository ;
 
     public Page<ReserveHistDto> getReserveList(String email, Pageable pageable){
@@ -90,7 +86,7 @@ public class ReserveService {
     public void cancelReserve(Long reserveId){
         Reserve reserve = reserveRepository.findById(reserveId)
                 .orElseThrow(EntityNotFoundException::new) ;
-        reserve.cancelReserve();
+        reserveRepository.delete(reserve);
     }
 
     // 로그인 한 사람과 이메일의 주소가 동일한지 검사합니다.
@@ -107,39 +103,41 @@ public class ReserveService {
         }
     }
     // 장바구니에서 주문할 상품 데이터를 전달 받아서 주문을 생성하는 로직을 구현합니다.
-    public Long reserves(List<ReserveDto> reserveDtoList, String email, LocalDateTime startTime, LocalDateTime endTime, Integer personnel, String req){
-        // reserveDtoList : 상품 아이디와 수량을 가지고 있는 객체들의 모음
-        Member member = memberRepository.findByEmail(email) ;
-        List<ReserveProduct> reserveProductList = new ArrayList<>() ; // 주문할 상품 리스트
-        for(ReserveDto dto : reserveDtoList){
-            Long productId = dto.getProductId();
-            Product product = productRepository.findById(productId)
-                    .orElseThrow(EntityNotFoundException::new);
-            int count = dto.getCount();
-
-            ReserveProduct reserveProduct = ReserveProduct.createReserveProduct(product, count,startTime, endTime, personnel, req);
-            reserveProductList.add(reserveProduct) ;
-        }
-
-        Reserve reserve = Reserve.createreserve(member, reserveProductList,startTime,endTime,personnel,req);
-        reserve.setMember(member);
-        reserve.setReserveProducts(reserveProductList);
-        reserve.setStartTime(startTime);
-        reserve.setEndTime(endTime);
-        reserve.setPersonnel(personnel);
-        reserve.setReq(req);
-        reserveRepository.save(reserve) ;
-
-        return reserve.getId();
-    }
-
-    // 상품 등록자와 주문한 회원 정보가 함께 조회되는 주문 목록을 반환합니다.
-    public List<Reserve> findAllReservationsWithMembers() {
-        return reserveRepository.findAllReservationsWithMembers();
-    }
-
-//    public Reserve findReservationById(Long reservationId) {
-//        return reserveRepository.findById(reservationId)
-//                .orElseThrow(() -> new EntityNotFoundException("예약을 찾을 수 없습니다. reservationId: " + reservationId));
+//    public Long reserves(List<ReserveDto> reserveDtoList, String email, LocalDateTime startTime, LocalDateTime endTime, Integer personnel,String req){
+//        // reserveDtoList : 상품 아이디와 수량을 가지고 있는 객체들의 모음
+//
+//        Member member = memberRepository.findByEmail(email) ;
+//        List<ReserveProduct> reserveProductList = new ArrayList<>() ; // 주문할 상품 리스트
+//        for(ReserveDto dto : reserveDtoList){
+//            Long productId = dto.getProductId();
+//            Product product = productRepository.findById(productId)
+//                    .orElseThrow(EntityNotFoundException::new);
+//            int count = dto.getCount();
+//
+//            ReserveProduct reserveProduct = ReserveProduct.createReserveProduct(product, count,startTime, endTime,personnel,req);
+//            reserveProductList.add(reserveProduct) ;
+//        }
+//
+//        Reserve reserve = Reserve.createreserve(member,reserveProductList,startTime,endTime,personnel,req);
+//        reserve.setMember(member);
+//        reserve.setReserveProducts(reserveProductList);
+//        reserve.setStartTime(startTime);
+//        reserve.setEndTime(endTime);
+//        reserve.setPersonnel(personnel);
+//        reserve.setReq(req);
+//        reserveRepository.save(reserve) ;
+//
+//        return reserve.getId();
 //    }
+
+
+
+
+    public List<Reserve> findAllReservationsWithMembersByCreateBy(String sessionId) {
+        return reserveRepository.findAllReservationsWithMembersByCreateBy(sessionId);
+    }
+
+
+
+
 }

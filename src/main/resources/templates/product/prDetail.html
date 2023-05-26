@@ -189,7 +189,7 @@
       error: function(xhr, status, error) {
         if (xhr.status == 401) {
           alert('로그인 이후 이용해 주세요.');
-          location.href = '/members/login';
+          location.href = '/members/new';
         } else {
           var errorMessage = xhr.responseJSON.message;
           alert(errorMessage);
@@ -328,18 +328,19 @@
     </script>
 </th:block>
 
+
 <div class="content" layout:fragment="content">
     <input type="text" id="productId" th:value="${product.id}">
     <div class="d-flex">
         <!--/* 대표 이미지 영역 */-->
         <div class="repImgDiv">
-                <img class="rounded repImg" th:alt="${product.name}" th:src="${product.productImageDtoList[0].imageUrl}">
+            <img class="rounded repImg" th:alt="${product.name}" th:src="${product.productImageDtoList[0].imageUrl}">
         </div>
         <div class="wd50">
                 <span class="badge badge-primary mgb-15" th:if="${product.productStatus == T(com.party.constant.ProductStatus).RESERVE}">
                     예약가능
                 </span>
-                <span class="badge badge-primary mgb-15" th:unless="${product.productStatus == T(com.party.constant.ProductStatus).RESERVE}">
+            <span class="badge badge-primary mgb-15" th:unless="${product.productStatus == T(com.party.constant.ProductStatus).RESERVE}">
                     예약불가
                 </span>
             <div class="h4" th:text="${product.name}"></div>
@@ -363,50 +364,52 @@
                 <h3 name="totalPrice" id="totalPrice" class="font-weight-bold"></h3>
             </div>
 
-                <div class="text-right" th:if="${product.productStatus == T(com.party.constant.ProductStatus).RESERVE}">
-                    <button type="button" class="btn btn-light border-primary btn-lg" onclick="addCart()">
-                        찜하기
-                    </button>
-                    <button type="button" class="btn btn-primary btn-lg" onclick="reserve()">예약하기</button>
-                </div>
+            <div class="text-right" th:if="${product.productStatus == T(com.party.constant.ProductStatus).RESERVE}">
+                <button type="button" class="btn btn-light border-primary btn-lg" onclick="addCart()">
+                    찜하기
+                </button>
+                <button type="button" class="btn btn-primary btn-lg" onclick="reserve()">예약하기</button>
+            </div>
 
-                <div class="text-right" th:unless="${product.productStatus == T(com.party.constant.ProductStatus).RESERVE}">
-                    <button type="button" class="btn btn-danger btn-lg">품절</button>
-                </div>
+            <div class="text-right" th:unless="${product.productStatus == T(com.party.constant.ProductStatus).RESERVE}">
+                <button type="button" class="btn btn-danger btn-lg">품절</button>
+            </div>
 
         </div>
     </div>
     <div  style="display: flex; flex-wrap: nowrap; overflow-x: auto;">
         <div th:each="productImage : ${product.productImageDtoList}" class="margin" >
 
-                <img class="" th:if="${not #strings.isEmpty(productImage.imageUrl)}" th:src="${productImage.imageUrl}" width="300" height="300">
+            <img class="" th:if="${not #strings.isEmpty(productImage.imageUrl)}" th:src="${productImage.imageUrl}" width="300" height="300">
 
         </div>
     </div>
 
 
-<!--    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel"  data-bs-interval="2000">-->
-<!--        <ol class="carousel-indicators">-->
-<!--            <li data-bs-target="#carouselExampleIndicators" th:each="productImage, status: ${product.productImageDtoList}" th:data-bs-slide-to="${status.index}" th:classappend="${status.index == 0} ? 'active'"></li>-->
-<!--        </ol>-->
-<!--        <div class="carousel-inner text-center">-->
-<!--            <div th:each="productImage, status: ${product.productImageDtoList}" th:classappend="${status.index == 0} ? 'carousel-item active' : 'carousel-item'">-->
-<!--                <img th:if="${not #strings.isEmpty(productImage.imageUrl)}" th:src="${productImage.imageUrl}"  width="300" height="300" alt="Image">-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">-->
-<!--            <span class="carousel-control-prev-icon" aria-hidden="false"></span>-->
-<!--            <span class="visually-hidden">Previous</span>-->
-<!--        </a>-->
-<!--        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-slide="next">-->
-<!--            <span class="carousel-control-next-icon" aria-hidden="false"></span>-->
-<!--            <span class="visually-hidden">Next</span>-->
-<!--        </a>-->
-<!--    </div>-->
+    <!--    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel"  data-bs-interval="2000">-->
+    <!--        <ol class="carousel-indicators">-->
+    <!--            <li data-bs-target="#carouselExampleIndicators" th:each="productImage, status: ${product.productImageDtoList}" th:data-bs-slide-to="${status.index}" th:classappend="${status.index == 0} ? 'active'"></li>-->
+    <!--        </ol>-->
+    <!--        <div class="carousel-inner text-center">-->
+    <!--            <div th:each="productImage, status: ${product.productImageDtoList}" th:classappend="${status.index == 0} ? 'carousel-item active' : 'carousel-item'">-->
+    <!--                <img th:if="${not #strings.isEmpty(productImage.imageUrl)}" th:src="${productImage.imageUrl}"  width="300" height="300" alt="Image">-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">-->
+    <!--            <span class="carousel-control-prev-icon" aria-hidden="false"></span>-->
+    <!--            <span class="visually-hidden">Previous</span>-->
+    <!--        </a>-->
+    <!--        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-slide="next">-->
+    <!--            <span class="carousel-control-next-icon" aria-hidden="false"></span>-->
+    <!--            <span class="visually-hidden">Next</span>-->
+    <!--        </a>-->
+    <!--    </div>-->
 
 
 
     <div id="calendar"></div>
+
+
 
 
     <div id="timePicker" title="시간 선택">
@@ -425,13 +428,13 @@
 
 
 
-   <div class="container01">
-       <div class="container">
-           <h4 class="display-5">상품 상세 설명</h4>
-           <hr class="my-4">
-           <p class="lead" th:text="${product.description}"></p>
-       </div>
-   </div>
+    <div class="container01">
+        <div class="container">
+            <h4 class="display-5">상품 상세 설명</h4>
+            <hr class="my-4">
+            <p class="lead" th:text="${product.description}"></p>
+        </div>
+    </div>
     <br/><br/><br/><br/><br/>
 
     <div class="container01">
@@ -624,5 +627,4 @@
 
     </div></div>
 </div>
-
 </html>

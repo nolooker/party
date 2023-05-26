@@ -5,6 +5,7 @@ import com.party.entity.Product;
 import com.party.entity.ProductImage;
 import com.party.repository.ProductImageRepository;
 import com.party.repository.ProductRepository;
+import com.party.repository.ReserveRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductImageService productImageService;
 	private final ProductImageRepository productImageRepository;
+    private final ReserveRepository reserveRepository;
 
     // 상품 등록
     public Long saveProduct(ProductFormDto dto, List<MultipartFile> uploadedFile) throws Exception {
@@ -99,5 +101,7 @@ public class ProductService {
     public Page<HostProductDto> getHostProductPage(ProductSearchDto dto, Pageable pageable){
        return productRepository.getHostProductPage(dto,pageable);
     }
+
+
 
 }

@@ -33,5 +33,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Queryds
             "%:description% order by i.price desc ",nativeQuery = true)
     List<Product> findByProductDetail02(@Param("description") String description);
 
+
+
+
 }
 

@@ -5,7 +5,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter@Setter
 public class HostProductDto {
     private Long id;
     private String name;
@@ -15,11 +15,13 @@ public class HostProductDto {
     private String imageUrl;
     private Integer price;
     private ProductStatus productStatus;
+    private String address;
 
 
     @QueryProjection //Projection은 테이블의 특정 컬럼 정보를 조회하는 동작을 말합니다/.
     //해당 조회 결과를 dto에 대입해 줍니다.
-    public HostProductDto(Long id, String name, String description, String fit, Integer useTime , String imageUrl, Integer price, ProductStatus productStatus) {
+
+    public HostProductDto(Long id, String name, String description, String fit, Integer useTime, String imageUrl, Integer price, ProductStatus productStatus, String address) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -28,5 +30,6 @@ public class HostProductDto {
         this.imageUrl = imageUrl;
         this.price = price;
         this.productStatus = productStatus;
+        this.address = address;
     }
 }

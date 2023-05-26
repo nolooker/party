@@ -491,6 +491,18 @@ progress {
   max-width: 100%;
   height: auto; }
 
+  .image-container {
+      width: 400px; /* 원하는 가로 크기 */
+      height: 400px; /* 원하는 세로 크기 */
+      overflow: hidden; /* 크기를 넘어가는 부분을 숨김 */
+    }
+
+    .image-container img {
+      width: 100%;
+      height: auto;
+      object-fit: cover; /* 이미지 비율을 유지하며 가득 채움 */
+    }
+
 .img-thumbnail {
   padding: 0.25rem;
   background-color: #fff;

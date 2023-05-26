@@ -21,7 +21,7 @@
             var searchBy = $("#searchBy").val();
             var searchQuery = $("#searchQuery").val();
 
-            location.href="/list/products/" + page + "?searchDateType=" + searchDateType
+            location.href="/admin/products/" + page + "?searchDateType=" + searchDateType
             + "&productStatus=" + productStatus
             + "&searchBy=" + searchBy
             + "&searchQuery=" + searchQuery;
@@ -40,33 +40,34 @@
 </th:block>
 <div class="row">
 
-<div th:each="bean : ${products.getContent()}" class="col-md-4 margin">
-  <div class="property-item">
-    <a th:href="'/product/' + ${bean.id}" class="img">
-      <!-- bean의 imageUrl 속성을 사용하여 이미지 출력 -->
-      <img th:src="${bean.imageUrl}" th:alt="${bean.name}" class="img-fluid" height="300" width="300" />
-    </a>
+  <div th:each="bean : ${products.getContent()}" class="col-md-4 margin">
+    <div class="property-item">
+      <a th:href="'/product/' + ${bean.id}" class="img">
+        <!-- bean의 imageUrl 속성을 사용하여 이미지 출력 -->
+        <img th:src="${bean.imageUrl}" th:alt="${bean.name}" class="img-fluid" height="300" width="300" />
+      </a>
 
+    </div>
   </div>
 </div>
-</div>
 
 
-    <div class="content" layout:fragment="content">
-  <form th:action="@{'/list/products/' + ${products.number}}" role="form" method="get" th:object="${products}">
+<div class="content" layout:fragment="content">
+  <form th:action="@{'/admin/products/' + ${products.number}}" role="form" method="get" th:object="${products}">
     <!-- /* 데이터 목록 */ -->
     <table class="table">
       <thead>
       <tr>
         <td>파티룸</td>
-        <td>등록 번호</td>
+        <td>파티룸 주소</td>
         <td>상품명</td>
         <td>인원수</td>
         <td>가격</td>
         <td>사용 가능 시간</td>
         <td>상세 설명</td>
         <td>예약 상태</td>
-        <td>예약</td>
+        <td>수정</td>
+        <td>삭제</td>
       </tr>
       </thead>
       <tbody>
@@ -78,7 +79,8 @@
           </a>
         </td>
 
-        <td th:text="${bean.id}"></td>
+
+        <td th:text="${bean.address}"></td>
 
         <td th:text="${bean.name}"></td>
 
@@ -93,11 +95,18 @@
         <td th:text="${bean.productStatus == T(com.party.constant.ProductStatus).RESERVE ? '예약가능' : '예약불가'}"></td>
 
         <td>
-        <!-- 예약 버튼 -->
-
+          <!-- 수정 버튼 -->
           <button type="submit">
-              <a href="/reserves">예약하기</a>
+            <a th:href="@{'/admin/product/'+ ${bean.id}}">수정하기</a>
           </button>
+        </td>
+
+        <td>
+          <!-- 삭제 버튼 -->
+          <form method="POST" th:action="@{'/host/product/delete/'+${bean.id}}"
+                onsubmit="return confirm('파티룸을 삭제하시겠습니까?');">
+            <button type="submit">삭제</button>
+          </form>
         </td>
 
       </tr>
@@ -130,10 +139,12 @@
         <option value="RESERVE">예약가능</option>
         <option value="NOT_RESERVE">예약불가</option>
       </select>
-      <!--        <select th:field="*{searchBy}" class="form-control" style="width:auto;">-->
-      <!--          <option value="name">상품명</option>-->
-      <!--&lt;!&ndash;          <option value="createdBy">등록자</option>&ndash;&gt;-->
-      <!--        </select>-->
+
+      <select th:field="*{searchBy}" class="form-control" style="width:auto;">
+
+        <option value="address">주소</option>
+      </select>
+
       <input th:field="*{searchQuery}" class="form-control" type="text" placeholder="검색어를 입력해 주세요.">
       <button id="searchBtn" type="submit" class="btn btn-primary">검색</button>
     </div>

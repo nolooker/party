@@ -55,6 +55,7 @@ public class Product extends BaseEntity {
 
 
 
+
     public void updateProduct(ProductFormDto productFormDto){
         this.name=productFormDto.getName();
         this.price=productFormDto.getPrice();

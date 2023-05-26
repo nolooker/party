@@ -60,12 +60,14 @@
       <td th:text="${bean.endTime}"></td>
       <td th:text="${bean.personnel}"></td>
       <td th:text="${bean.req}"></td>
+
+
     </tr>
+
     </tbody>
   </table>
 </div>
-
-
+</body>
 <div th:with="start=${(products.number/maxPage)*maxPage + 1}, end=(${(products.totalPages == 0) ? 1 : (start + (maxPage - 1) < products.totalPages ? start + (maxPage - 1) : products.totalPages)})" >
   <ul class="pagination justify-content-center">
     <li class="page-item" th:classappend="${products.first}?'disabled'">
@@ -99,4 +101,6 @@
   <button id="searchBtn" type="submit" class="btn btn-primary">검색</button>
 </div>
 
+</form>
+</div>
 </html>
