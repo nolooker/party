@@ -36,7 +36,8 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom{
                                 review.name,
                                 review.title,
                                 review.description,
-                                reviewImage.imageUrl
+                                reviewImage.imageUrl,
+                                review.rating
 
 
                         )
@@ -79,7 +80,8 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom{
                                         review.description,
                                         reviewImage.imageUrl,
                                         review.regdate,
-                                        review.createBy
+                                        review.createBy,
+                                        review.rating
 
                                 )
                         )

@@ -4,6 +4,8 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/mylayout}">
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
   <script th:inline="javascript">
@@ -23,7 +25,23 @@
             location.href="/list/reviews/" + page + "?searchDateType=" + searchDateType
             + "&searchBy=" + searchBy
             + "&searchQuery=" + searchQuery;
-        }
+        };
+
+        function convertToHearts(rating) {
+            var fullHeart = '♥';
+            var emptyHeart = '♡';
+            var hearts = '';
+
+            for (var i = 1; i <= 5; i++) {
+              if (i <= rating) {
+                hearts += fullHeart;
+              } else {
+                hearts += emptyHeart;
+              }
+            }
+
+            return hearts;
+          };
 
     </script>
 </th:block>
@@ -58,7 +76,14 @@
 
         <div class="card-body">
           <h5 class="card-title" th:text="${bean.title}"></h5>
+
+          <p class="card-text">
+            이용후기 :
+            <span th:each="star : ${#numbers.sequence(1, bean.rating)}">&#10084;</span>
+          </p>
+
           <p class="card-text" th:text="${bean.description}"></p>
+
         </div>
         <div class="card-footer">
           <small class="text-muted" th:text="${bean.name}"></small>

@@ -63,7 +63,7 @@ public class HostController {
         model.addAttribute("searchDto", dto); // 검색 조건 유지를 위하여
         model.addAttribute("maxPage", 5); // 하단에 보여줄 최대 페이지 번호
 
-        return "product/prList";
+        return "product/prList3";
     }
 
 

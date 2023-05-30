@@ -52,49 +52,60 @@
           >
             <li class="active"><a href="/members/new" sec:authorize="isAnonymous()">로그인</a></li>
             <li class="has-children">
-              <a href="index.html" sec:authorize="isAuthenticated()" >회원</a>
+              <a  sec:authorize="isAuthenticated()" >회원</a>
               <ul class="dropdown">
                 <li><a href="#" sec:authorize="isAnonymous()">로그인</a></li>
                 <li><a href="/members/logout" sec:authorize="isAuthenticated()">로그 아웃</a></li>
-                <li><a href="#" sec:authorize="isAuthenticated()">정보 수정</a></li>
                 <li><a th:href="@{/reservelist}" sec:authorize="hasAnyAuthority('ROLE_HOST')">예약 목록</a></li>
                 <li><a th:href="@{/members/detail/{id}(id=${session.User.id})}" sec:authorize="isAuthenticated()">마이 페이지</a></li>
-                <li><a href="/members/list" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">회원 목록 보기</a></li>
-                <li><a th:href="@{/members/update/{id}(id=${session.User.id})}" sec:authorize="isAuthenticated()">회원정보 및 수정</a></li>
-                <li><a th:href="@{/members/hostlist/{category}(category='HOST')}" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">호스트 승인 요청</a></li>
+                <li><a th:href="@{/members/update/{id}(id=${session.User.id})}" sec:authorize="isAuthenticated()">회원정보 수정</a></li>
+                <li><a href="/my/review" sec:authorize="hasAnyAuthority('ROLE_USER')">이용 후기 수정/삭제</a></li>
+
               </ul>
             </li>
+            <li class="has-children">
+              <a href="#" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">관리자</a>
+              <ul class="dropdown">
+                <li><a th:href="@{/members/hostlist/{category}(category='HOST')}" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">호스트 승인 요청</a></li>
+                <li><a href="/members/list" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">회원 목록 보기</a></li>
+              </ul>
+
+            </li>
             <li class="nav-item" sec:authorize="isAuthenticated()">
-              <a class="nav-link" href="/reserves">주문 내역</a>
+              <a class="nav-link" href="/reserves" sec:authorize="isAuthenticated()">주문 내역</a>
             </li>
 
             <li class="has-children">
-              <a href="index.html" >상품</a>
+              <a>상품</a>
               <ul class="dropdown">
                 <li><a href="/admin/products/new" sec:authorize="hasAnyAuthority('ROLE_ADMIN','ROLE_HOST')">상품 등록</a></li>
                <li><a th:href="@{/host/products/}" sec:authorize="hasAnyAuthority('ROLE_HOST')">호스트 상품 목록</a></li>
                 <li class="has-children">
-                  <a href="/admin/products" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">상품 목록</a>
+                  <a href="/admin/products" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">상품 목록 수정/삭제</a>
                   
                   <a href="/list/products">전체 상품 목록</a>
-                  <ul class="dropdown">
-                    <li><a href="/product/{productId}">파티룸</a></li>
-                    <li><a href="#">야구장</a></li>
-                    <li><a href="#">농구장</a></li>
-                  </ul>
+
                 </li>
               </ul>
             </li>
 
             <li class="has-children">
-              <a href="index.html">게시물</a>
+              <a >게시물</a>
               <ul class="dropdown">
-                <li><a href="#">서비스 소개</a></li>
-                <li><a href="#">공지 사항</a></li>
-                <li><a href="#">이용 약관</a></li>
+                <li><a href="/notice/list" sec:authorize="isAuthenticated()">공지 사항</a></li>
+                <li><a href="/notice/admin/list" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">(admin)공지사항</a></li>
                 <li><a href="/board/list">게시판</a></li>
-                <li><a href="#">Q&A</a></li>
+                <li><a href="/qna/list">Q&A</a></li>
+                <li><a href="#">이용 약관</a></li>
+                <li><a href="#">서비스 소개</a></li>
                 <li><a href="#">도움말</a></li>
+              </ul>
+            </li>
+            <li class="has-children">
+              <a >이용후기</a>
+              <ul class="dropdown">
+                <li><a href="/review/new" >이용 후기 등록</a></li>
+                <li><a href="/list/reviews" >이용 후기 목록</a></li>
               </ul>
             </li>
           </ul>
@@ -117,5 +128,12 @@
   <script src="/js/navbar.js"></script>
   <script src="/js/counter.js"></script>
   <script src="/js/custom.js"></script>
+    <script>
+  (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
+
+  ChannelIO('boot', {
+    "pluginKey": "b15d299c-8293-4699-926f-1644eb7d248b"
+  });
+</script>
 </div>
 </html>

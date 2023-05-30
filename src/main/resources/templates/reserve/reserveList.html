@@ -46,8 +46,10 @@
     <thead>
     <tr>
       <th>No.</th>
-      <th>예약 시작시간</th>
-      <th>예약 종료시간</th>
+      <th>예약 기간</th>
+      <th>예약자 성함</th>
+      <th>예약자 번호</th>
+      <th>예약자 이메일</th>
       <th>인원수</th>
       <th>요구사항</th>
 
@@ -56,8 +58,10 @@
     <tbody>
     <tr th:each="bean, status: ${reservations}">
       <td th:text="${bean.id}"></td>
-      <td th:text="${bean.startTime}"></td>
-      <td th:text="${bean.endTime}"></td>
+      <td th:text="${bean.startTime + ' / ' + bean.endTime}"></td>
+      <td th:text="${bean.member.name}"></td>
+      <td th:text="${bean.member.phone}"></td>
+      <td th:text="${bean.member.email}"></td>
       <td th:text="${bean.personnel}"></td>
       <td th:text="${bean.req}"></td>
 

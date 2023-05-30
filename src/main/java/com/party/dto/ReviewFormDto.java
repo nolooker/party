@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.modelmapper.ModelMapper;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,9 @@ public class ReviewFormDto {
 
     @NotBlank(message = "후기 내용은 필수 입력 사항입니다.")
     private String description;
+
+    @NotNull(message = "이용 후기를 하트로 알려주세요.")
+    private int rating;
 
 //    @NotBlank(message = "파티룸 수용인원은 필수 입력 사항입니다.")
 //    private String fit;
@@ -59,4 +63,7 @@ public class ReviewFormDto {
     }
 
 
+    public int getRating() {
+        return rating;
+    }
 }

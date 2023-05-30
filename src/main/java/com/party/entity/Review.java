@@ -29,32 +29,8 @@ public class Review extends BaseEntity {
     @Column(nullable = false)
     private String description;
 
-//    @Enumerated(EnumType.STRING)
-//    private ReviewStatus reviewStatus;
-
-//    @Column(nullable = false)
-//    private String fit;
-//
-//    @Column(nullable = false)
-//    private Integer useTime;
-//
-//    @Column(nullable = false,name = "review_price")
-//    private Integer price;
-//
-
-//
-//    @Lob
-//    @Column(nullable = false)
-//    private String refund; // 환불 규정
-//
-//    @Lob
-//    @Column(nullable = false)
-//    private String guide; // 시설안내
-//
-//    @Lob
-//    @Column(nullable = false)
-//    private String address; // 주소 이용한 지도
-
+    @Column(nullable = false)
+    private int rating;
 
 
 
@@ -62,6 +38,7 @@ public class Review extends BaseEntity {
         this.name=reviewFormDto.getName();
         this.title=reviewFormDto.getTitle();
         this.description= reviewFormDto.getDescription();
+        this.rating = reviewFormDto.getRating();
     }
 
     // Review 엔티티가 삭제될 때 해당 Review와 매핑되어 있는 모든 ReviewImage 엔티티도 함께 삭제됩니다.

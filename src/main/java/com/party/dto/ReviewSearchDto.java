@@ -19,5 +19,4 @@ public class ReviewSearchDto {
 	private Long id;
 
 
-
 }

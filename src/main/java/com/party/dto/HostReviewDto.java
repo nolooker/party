@@ -15,6 +15,8 @@ public class HostReviewDto {
     private String imageUrl;
     private LocalDateTime regdate;
     private String createBy;
+    private int rating;
+
 
 //    private String fit;
 //    private Integer useTime;
@@ -24,7 +26,7 @@ public class HostReviewDto {
     @QueryProjection //Projection은 테이블의 특정 컬럼 정보를 조회하는 동작을 말합니다/.
     //해당 조회 결과를 dto에 대입해 줍니다.
 
-    public HostReviewDto(Long id, String name, String title, String description, String imageUrl, LocalDateTime regdate, String createBy) {
+    public HostReviewDto(Long id, String name, String title, String description, String imageUrl, LocalDateTime regdate, String createBy, int rating) {
         this.id = id;
         this.name = name;
         this.title = title;
@@ -32,6 +34,7 @@ public class HostReviewDto {
         this.imageUrl = imageUrl;
         this.regdate = regdate;
         this.createBy = createBy;
+        this.rating = rating;
     }
 
 
