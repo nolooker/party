@@ -10,17 +10,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/mylayout}">
 
-<!-- 사용자 스크립트 추가 -->
-<th:block layout:fragment="script">
-  <script>
-  (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
-
-  ChannelIO('boot', {
-    "pluginKey": "b15d299c-8293-4699-926f-1644eb7d248b"
-  });
-</script>
-</th:block>
-
 <body>
 <div class="content" layout:fragment="content">
   <head>
@@ -83,7 +72,7 @@
       <div class="row justify-content-center align-items-center">
         <div class="col-lg-9 text-center">
           <h1 class="heading" data-aos="fade-up">
-            동네를 입력해 주세용~
+            동네를 입력해 주세요.
           </h1>
           <form action="http://localhost:8891/list/products" class="narrow-w form-search d-flex align-items-stretch mb-3"
                 data-aos="fade-up" data-aos-delay="200">
@@ -91,7 +80,7 @@
 
               <option value="address">주소</option>
             </select>
-            <input name="searchQuery" class="form-control px-4" type="text" placeholder="지역을 입력해 주세요~">
+            <input name="searchQuery" class="form-control px-4" type="text" placeholder="지역을 입력해 주세요.">
             <button type="submit" class="btn btn-primary">검색</button>
           </form>
 
@@ -136,14 +125,27 @@
                   <div class="property-content">
                     <div class="price mb-2"><span class="city d-block mb-3" th:text="${bean.name}" th:alt="${bean.name}"/></div>
                     <div>
-                      <span class="d-block mb-2 text-black-50" th:text="${bean.description}" th:alt="${bean.description}"/>
+                      <span class="d-block mb-2 text-black-50 description" th:text="${bean.description}" th:alt="${bean.description}"/>
 
-                      <span th:text="${#numbers.formatInteger(bean.price, 0, 'COMMA')}"/>원
-                      <span class="city d-block mb-3" th:text="${bean.address}" th:alt="${bean.address}"/>
+                        <script>
+                       var descriptionElements = document.getElementsByClassName("description");
+                        var maxLength = 100;
+
+                        Array.from(descriptionElements).forEach(function(element) {
+                            if (element.textContent.length > maxLength) {
+                                element.textContent = element.textContent.substring(0, maxLength) + "...";
+                            }
+                        });
+                        </script>
+
+                        <h2 class="price">
+                            <span style="color: #FF69B4; font-weight: bold;" th:text="${#numbers.formatInteger(bean.price, 0, 'COMMA')}"></span>￦
+                        </h2>
+                        <h2 class="city d-block mb-3" th:text="${bean.address}" th:alt="${bean.address}"></h2>
 
 
 
-                      <a th:href="'/product/' + ${bean.id}" class="btn btn-primary py-2 px-3">상세보기</a>
+                      <a th:href="'/product/' + ${bean.id}" class="btn btn-primary py-2 px-3 btn-violet">상세보기</a>
                     </div>
                   </div>
                 </div>
@@ -229,6 +231,9 @@
           </div>
       </section>
 
+
+
+
   <div class="section sec-testimonials">
     <div class="container">
       <div class="row mb-5 align-items-center">
@@ -251,113 +256,32 @@
       </div>
       <div class="testimonial-slider-wrap">
         <div class="testimonial-slider">
-          <div class="item">
-            <div class="testimonial">
-              <img
-                      src="images/person_1-min.jpg"
-                      alt="Image"
-                      class="img-fluid rounded-circle w-25 mb-4"
-              />
-              <div class="rate">
-                <span class="icon-star text-warning"></span>
-                <span class="icon-star text-warning"></span>
-                <span class="icon-star text-warning"></span>
-                <span class="icon-star text-warning"></span>
-                <span class="icon-star text-warning"></span>
-              </div>
-              <h3 class="h5 text-primary mb-4">James Smith</h3>
-              <blockquote>
-                <p>
-                  &ldquo;Far far away, behind the word mountains, far from the
-                  countries Vokalia and Consonantia, there live the blind
-                  texts. Separated they live in Bookmarksgrove right at the
-                  coast of the Semantics, a large language ocean.&rdquo;
-                </p>
-              </blockquote>
-              <p class="text-black-50">Designer, Co-founder</p>
-            </div>
-          </div>
+          <th:block th:each="bean, status: ${reviews.getContent()}">
+            <div class="item">
+              <div class="testimonial">
+                <img th:src="${bean.imageUrl}" th:alt="${bean.name}" class="card-img-top" />
+                  <br/><br/>
+                  <div class="rate">
+                      <h5>
+                          <span style="color: #FF69B4; font-weight: bold;">평점: </span><small class="text-muted"><span style="color: #FFD700;" th:text="${bean.rating}"></span></small>
+                      </h5>
 
-          <div class="item">
-            <div class="testimonial">
-              <img
-                      src="images/person_2-min.jpg"
-                      alt="Image"
-                      class="img-fluid rounded-circle w-25 mb-4"
-              />
-              <div class="rate">
-                <span class="icon-star text-warning"></span>
-                <span class="icon-star text-warning"></span>
-                <span class="icon-star text-warning"></span>
-                <span class="icon-star text-warning"></span>
-                <span class="icon-star text-warning"></span>
-              </div>
-              <h3 class="h5 text-primary mb-4">Mike Houston</h3>
-              <blockquote>
-                <p>
-                  &ldquo;Far far away, behind the word mountains, far from the
-                  countries Vokalia and Consonantia, there live the blind
-                  texts. Separated they live in Bookmarksgrove right at the
-                  coast of the Semantics, a large language ocean.&rdquo;
-                </p>
-              </blockquote>
-              <p class="text-black-50">Designer, Co-founder</p>
-            </div>
-          </div>
 
-          <div class="item">
-            <div class="testimonial">
-              <img
-                      src="images/person_3-min.jpg"
-                      alt="Image"
-                      class="img-fluid rounded-circle w-25 mb-4"
-              />
-              <div class="rate">
-                <span class="icon-star text-warning"></span>
-                <span class="icon-star text-warning"></span>
-                <span class="icon-star text-warning"></span>
-                <span class="icon-star text-warning"></span>
-                <span class="icon-star text-warning"></span>
-              </div>
-              <h3 class="h5 text-primary mb-4">Cameron Webster</h3>
-              <blockquote>
-                <p>
-                  &ldquo;Far far away, behind the word mountains, far from the
-                  countries Vokalia and Consonantia, there live the blind
-                  texts. Separated they live in Bookmarksgrove right at the
-                  coast of the Semantics, a large language ocean.&rdquo;
-                </p>
-              </blockquote>
-              <p class="text-black-50">Designer, Co-founder</p>
-            </div>
-          </div>
 
-          <div class="item">
-            <div class="testimonial">
-              <img
-                      src="images/person_4-min.jpg"
-                      alt="Image"
-                      class="img-fluid rounded-circle w-25 mb-4"
-              />
-              <div class="rate">
-                <span class="icon-star text-warning"></span>
-                <span class="icon-star text-warning"></span>
-                <span class="icon-star text-warning"></span>
-                <span class="icon-star text-warning"></span>
-                <span class="icon-star text-warning"></span>
+                  </div>
+
+                  <h3 class="h5 text-primary mb-4">
+                      <span style="color: FF69B4; font-weight: bold;">작성자:</span> <span  style="font-weight: bold" th:text="${bean.name}"></span>
+                  </h3>
+
+
+                  <blockquote>
+                  <p class="card-text" th:text="${bean.description}"></p>
+                </blockquote>
+
               </div>
-              <h3 class="h5 text-primary mb-4">Dave Smith</h3>
-              <blockquote>
-                <p>
-                  &ldquo;Far far away, behind the word mountains, far from the
-                  countries Vokalia and Consonantia, there live the blind
-                  texts. Separated they live in Bookmarksgrove right at the
-                  coast of the Semantics, a large language ocean.&rdquo;
-                </p>
-              </blockquote>
-              <p class="text-black-50">Designer, Co-founder</p>
             </div>
-          </div>
+          </th:block>
         </div>
       </div>
     </div>
@@ -485,119 +409,7 @@
   <!--        </div>-->
   <!--    </div>-->
 
-  <!--    <div class="site-footer">-->
-  <!--        <div class="container">-->
-  <!--            <div class="row">-->
-  <!--                <div class="col-lg-4">-->
-  <!--                    <div class="widget">-->
-  <!--                        <h3>Contact</h3>-->
-  <!--                        <address>43 Raymouth Rd. Baltemoer, London 3910</address>-->
-  <!--                        <ul class="list-unstyled links">-->
-  <!--                            <li><a href="tel://11234567890">+1(123)-456-7890</a></li>-->
-  <!--                            <li><a href="tel://11234567890">+1(123)-456-7890</a></li>-->
-  <!--                            <li>-->
-  <!--                                <a href="mailto:info@mydomain.com">info@mydomain.com</a>-->
-  <!--                            </li>-->
-  <!--                        </ul>-->
-  <!--                    </div>-->
-  <!--                    &lt;!&ndash; /.widget &ndash;&gt;-->
-  <!--                </div>-->
-  <!--                &lt;!&ndash; /.col-lg-4 &ndash;&gt;-->
-  <!--                <div class="col-lg-4">-->
-  <!--                    <div class="widget">-->
-  <!--                        <h3>Sources</h3>-->
-  <!--                        <ul class="list-unstyled float-start links">-->
-  <!--                            <li><a href="#">About us</a></li>-->
-  <!--                            <li><a href="#">Services</a></li>-->
-  <!--                            <li><a href="#">Vision</a></li>-->
-  <!--                            <li><a href="#">Mission</a></li>-->
-  <!--                            <li><a href="#">Terms</a></li>-->
-  <!--                            <li><a href="#">Privacy</a></li>-->
-  <!--                        </ul>-->
-  <!--                        <ul class="list-unstyled float-start links">-->
-  <!--                            <li><a href="#">Partners</a></li>-->
-  <!--                            <li><a href="#">Business</a></li>-->
-  <!--                            <li><a href="#">Careers</a></li>-->
-  <!--                            <li><a href="#">Blog</a></li>-->
-  <!--                            <li><a href="#">FAQ</a></li>-->
-  <!--                            <li><a href="#">Creative</a></li>-->
-  <!--                        </ul>-->
-  <!--                    </div>-->
-  <!--                    &lt;!&ndash; /.widget &ndash;&gt;-->
-  <!--                </div>-->
-  <!--                &lt;!&ndash; /.col-lg-4 &ndash;&gt;-->
-  <!--                <div class="col-lg-4">-->
-  <!--                    <div class="widget">-->
-  <!--                        <h3>Links</h3>-->
-  <!--                        <ul class="list-unstyled links">-->
-  <!--                            <li><a href="#">Our Vision</a></li>-->
-  <!--                            <li><a href="#">About us</a></li>-->
-  <!--                            <li><a href="#">Contact us</a></li>-->
-  <!--                        </ul>-->
 
-  <!--                        <ul class="list-unstyled social">-->
-  <!--                            <li>-->
-  <!--                                <a href="#"><span class="icon-instagram"></span></a>-->
-  <!--                            </li>-->
-  <!--                            <li>-->
-  <!--                                <a href="#"><span class="icon-twitter"></span></a>-->
-  <!--                            </li>-->
-  <!--                            <li>-->
-  <!--                                <a href="#"><span class="icon-facebook"></span></a>-->
-  <!--                            </li>-->
-  <!--                            <li>-->
-  <!--                                <a href="#"><span class="icon-linkedin"></span></a>-->
-  <!--                            </li>-->
-  <!--                            <li>-->
-  <!--                                <a href="#"><span class="icon-pinterest"></span></a>-->
-  <!--                            </li>-->
-  <!--                            <li>-->
-  <!--                                <a href="#"><span class="icon-dribbble"></span></a>-->
-  <!--                            </li>-->
-  <!--                        </ul>-->
-  <!--                    </div>-->
-  <!--                    &lt;!&ndash; /.widget &ndash;&gt;-->
-  <!--                </div>-->
-  <!--                &lt;!&ndash; /.col-lg-4 &ndash;&gt;-->
-  <!--            </div>-->
-  <!--            &lt;!&ndash; /.row &ndash;&gt;-->
-
-  <!--            <div class="row mt-5">-->
-  <!--                <div class="col-12 text-center">-->
-  <!--                    &lt;!&ndash;-->
-  <!--                      **==========-->
-  <!--                      NOTE:-->
-  <!--                      Please don't remove this copyright link unless you buy the license here https://untree.co/license/-->
-  <!--                      **==========-->
-  <!--                    &ndash;&gt;-->
-
-  <!--                    <p>-->
-  <!--                        Copyright &copy;-->
-  <!--                        <script>-->
-  <!--                document.write(new Date().getFullYear());-->
-  <!--              </script>-->
-  <!--                        . All Rights Reserved. &mdash; Designed with love by-->
-  <!--                        <a href="https://untree.co">Untree.co</a>-->
-  <!--                        &lt;!&ndash; License information: https://untree.co/license/ &ndash;&gt;-->
-  <!--                    </p>-->
-  <!--                    <div>-->
-  <!--                        Distributed by-->
-  <!--                        <a href="https://themewagon.com/" target="_blank">themewagon</a>-->
-  <!--                    </div>-->
-  <!--                </div>-->
-  <!--            </div>-->
-  <!--        </div>-->
-  <!--        &lt;!&ndash; /.container &ndash;&gt;-->
-  <!--    </div>-->
-  <!--    &lt;!&ndash; /.site-footer &ndash;&gt;-->
-
-  <!--    &lt;!&ndash; Preloader &ndash;&gt;-->
-  <!--    <div id="overlayer"></div>-->
-  <!--    <div class="loader">-->
-  <!--        <div class="spinner-border" role="status">-->
-  <!--            <span class="visually-hidden">Loading...</span>-->
-  <!--        </div>-->
-  <!--    </div>-->
 
   <script src="js/bootstrap.bundle.min.js"></script>
   <script src="js/tiny-slider.js"></script>

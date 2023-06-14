@@ -35,10 +35,10 @@ public class ReviewController {
         return "/review/rwInsertForm";
     }
 
-    // 이용후기 등록 중
+    // 이용후기 등록 처리
     @PostMapping(value = "/review/new")
     public String reviewNew(@Valid ReviewFormDto dto, BindingResult error, Model model,
-                             @RequestParam("reviewImageFile") List<MultipartFile> uploadedFile) {
+                            @RequestParam("reviewImageFile") List<MultipartFile> uploadedFile) {
         if (error.hasErrors()) {
             return "/review/rwInsertForm";
         }
@@ -48,17 +48,19 @@ public class ReviewController {
         }
 
         try {
-            reviewService.saveReview(dto, uploadedFile);
-
+            String rating = dto.getRating(); // 별점 가져오기
+            reviewService.saveReview(dto, uploadedFile, rating);
 
         } catch (Exception err) {
             err.printStackTrace();
             model.addAttribute("errorMessage", "예외가 발생했습니다.");
             return "/review/rwInsertForm";
-
         }
-        return "redirect:/"; //메인페이지로 이동
+        return "redirect:/"; // 메인페이지로 이동
     }
+
+
+
 
     // 이용후기 수정
     @GetMapping(value = "/my/review/{reviewId}")

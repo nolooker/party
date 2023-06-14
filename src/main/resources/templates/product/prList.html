@@ -90,7 +90,20 @@
 
         <td th:text="${bean.useTime}"></td>
 
-        <td th:text="${bean.description}"></td>
+        <td>
+          <span class="description" th:text="${bean.description}"></span>
+        </td>
+        <script>
+          var descriptionElements = document.getElementsByClassName("description");
+          var maxLength = 30;
+
+          Array.from(descriptionElements).forEach(function(element) {
+              var description = element.textContent;
+              if (description.length > maxLength) {
+                  element.textContent = description.substring(0, maxLength) + "...";
+              }
+          });
+        </script>
 
         <td th:text="${bean.productStatus == T(com.party.constant.ProductStatus).RESERVE ? '예약가능' : '예약불가'}"></td>
 
@@ -146,6 +159,7 @@
       </select>
 
       <input th:field="*{searchQuery}" class="form-control" type="text" placeholder="검색어를 입력해 주세요.">
+      &nbsp;&nbsp;&nbsp;&nbsp;
       <button id="searchBtn" type="submit" class="btn btn-primary">검색</button>
     </div>
 

@@ -44,10 +44,9 @@
     </style>
 </th:block>
 
-<!-- 사용자 정의 script 추가 -->
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-     $(document).ready(function() {
+   $(document).ready(function() {
   var calendar = $('#calendar').fullCalendar({
     // 달력 옵션 설정
 
@@ -57,31 +56,39 @@
     }
   });
 
-  loadAndDisplayReservation();
+  loadAndDisplayReservations();
 
   // 예약 정보를 로컬 스토리지에 저장하는 함수
-  function saveReservation(reservation) {
-    localStorage.setItem('reservation', JSON.stringify(reservation));
+  function saveReservation(productId, reservation) {
+    var reservations = loadReservations() || {};
+    if (!reservations[productId]) {
+      reservations[productId] = [];
+    }
+    reservations[productId].push(reservation);
+    localStorage.setItem('reservations', JSON.stringify(reservations));
   }
 
   // 예약 정보를 로컬 스토리지에서 로드하는 함수
-  function loadReservation() {
-    var reservation = localStorage.getItem('reservation');
-    if (reservation) {
-      return JSON.parse(reservation);
+  function loadReservations() {
+    var reservations = localStorage.getItem('reservations');
+    if (reservations) {
+      return JSON.parse(reservations);
     }
-    return null;
+    return {};
   }
 
   // 예약 정보 로드 및 표시
-  function loadAndDisplayReservation() {
-    var reservation = loadReservation();
-    if (reservation) {
-      var email = reservation.email; // 예약 정보에서 이메일 주소 가져오기
-      calendar.fullCalendar('renderEvent', {
-        title: email, // 이메일 주소를 title로 설정
-        start: reservation.startTime,
-        end: reservation.endTime
+  function loadAndDisplayReservations() {
+    var productId = $('#productId').val();
+    var reservations = loadReservations();
+    if (reservations[productId]) {
+      reservations[productId].forEach(function(reservation) {
+        var email = reservation.email; // 예약 정보에서 이메일 주소 가져오기
+        calendar.fullCalendar('renderEvent', {
+          title: email, // 이메일 주소를 title로 설정
+          start: reservation.startTime,
+          end: reservation.endTime
+        });
       });
     }
   }
@@ -129,15 +136,32 @@
     var startTime = $('#startTime').val();
     var endTime = $('#endTime').val();
     var email = $('#email').val(); // 이메일 주소 가져오기
+    var productId = $('#productId').val(); // 상품 ID 가져오기
 
     var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-    alert('email 형식으로 입력해 주세요.');
-    return;
-  }
+      alert('email 형식으로 입력해 주세요.');
+      return;
+    }
+
 
     var isoStartTime = selectedDate.format('YYYY-MM-DD') + 'T' + startTime + ':00';
     var isoEndTime = selectedDate.format('YYYY-MM-DD') + 'T' + endTime + ':00';
+
+     // 예약 확인 경고 창 표시
+    var confirmationMessage = startTime + ' ~ ' + endTime +  ' 예약하시겠습니까.?';
+    if (!confirm(confirmationMessage)) {
+        return;
+    }
+
+     var existingReservations = loadReservations()[productId] || [];
+     for (var i = 0; i < existingReservations.length; i++) {
+      var reservation = existingReservations[i];
+      if (reservation.startTime <= isoEndTime && reservation.endTime >= isoStartTime) {
+        alert('예약이 이미 되어있습니다.');
+        return;
+      }
+    }
 
     calendar.fullCalendar('renderEvent', {
       title: startTime + ' ~ ' + endTime + ' (' + email + ')',
@@ -147,8 +171,8 @@
       email: email // 이메일 주소 사용
     });
 
-    reserve(isoStartTime, isoEndTime);
-    saveReservation({
+    reserve(productId, isoStartTime, isoEndTime);
+    saveReservation(productId, {
       startTime: isoStartTime,
       endTime: isoEndTime,
       email: email // 이메일 주소 저장
@@ -156,16 +180,16 @@
     $('#timePicker').dialog('close');
   }
 
-  function reserve(startTime, endTime) {
+  function reserve(productId, startTime, endTime) {
     var myurl = '/reserve';
 
     var paramData = {
-      productId: $('#productId').val(),
+      productId: productId,
       count: $('#count').val(),
       startTime: startTime,
       endTime: endTime,
       personnel: $('#personnel').val(), // 인원 값을 가져옴
-    req: $('#req').val() // 요청사항 값을 가져옴
+      req: $('#req').val() // 요청사항 값을 가져옴
     };
 
     var param = JSON.stringify(paramData);
@@ -232,6 +256,8 @@
 
 
 
+
+
         $(document).ready(function(){
             calculateTotalPrice() ;
 
@@ -276,7 +302,7 @@
                 cache:false,
                 success:function(result, status){
                 alert('주문이 완료되었습니다.');
-                location.href='/' ;
+
                 },
                 error:function(xhr, status, error){
                     if(xhr.status == '401') {
@@ -328,7 +354,6 @@
     </script>
 </th:block>
 
-
 <div class="content" layout:fragment="content">
     <input type="text" id="productId" th:value="${product.id}">
     <div class="d-flex">
@@ -365,9 +390,7 @@
             </div>
 
             <div class="text-right" th:if="${product.productStatus == T(com.party.constant.ProductStatus).RESERVE}">
-                <button type="button" class="btn btn-light border-primary btn-lg" onclick="addCart()">
-                    찜하기
-                </button>
+
                 <button type="button" class="btn btn-primary btn-lg" onclick="reserve()">예약하기</button>
             </div>
 
@@ -425,6 +448,7 @@
         <input type="text" name="req" id="req" class="form-control">
         <span>예약자명은 본인 Email 입니다.: <input type="email" name="email" id="email" class="form-control"></span>
     </div>
+
 
 
 
@@ -515,7 +539,7 @@
         <div class="container">
             <h4 class="display-5">환불 규정</h4>
             <hr class="my-4">
-            <pre class="lead" th:text="|
+            <pre class="h5" th:text="|
           이용 당일(첫날)이후에 환불 관련 사항은 호스트에게 직접 문의하셔야 합니다.
 
           결제 후 2시간 이내에는 100% 환불이 가능합니다.(단, 이용시간 전까지만 가능)
@@ -548,7 +572,7 @@
         <div class="container">
             <h4 class="display-5">상세 위치</h4>
             <hr class="my-4">
-            <p class="lead" th:text="${product.address}"></p>
+            <p class="h3" th:text="${product.address}"></p>
             <div id="map" style="width:500px;height:400px;"></div>
             <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8bf3b961d22706ef0da3679f668896b2&libraries=services"></script>
             <script th:inline="javascript">
@@ -584,47 +608,5 @@
         </div>
     </div>
 
-
-
-
-
-
-
-
-
-
-
-    <div id="container" style="position: absolute; right: 100px; top: 300px;"><div class="box1" style="background-color: white;">
-        <div class="sidebar sticky-sidebar">
-            <div class="widget mb-4 pb-2">
-                <ul class="list-unstyled mb-0 catagory">
-                    <li>
-                        <span>예약날짜</span>
-                        <!-- <span class="float-right"></span> -->
-                        <span class="float-right"></span>
-                    </li>
-                    <li>
-                        <div>
-                            <div>
-                                <label for="quantity" style="display: inline-block;">총 예약인원</label>
-                                <div class="personcontainer d-flex align-items-center">
-                                    <div id="minus" class="button"><i class="bi bi-file-minus"></i></div>
-                                    <input type="number" id="quantity" name="pRepeople" value="1" min="1" max="30" required="">
-                                    <div id="plus" class="button"><i class="bi bi-plus-square" style="margin-left: 10px;"></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div><div class="box1" style="background-color: white;">
-        <div class="p-4 mt-4 rounded shadow" style="background-color: #704DE4">
-            <ul class="list-unstyled mb-0 catagory">
-                <li><button onclick="goToOrderPage();">예약신청하기</button></li>
-            </ul>
-        </div>
-
-    </div></div>
 </div>
 </html>

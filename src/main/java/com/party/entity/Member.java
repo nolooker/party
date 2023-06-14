@@ -40,14 +40,6 @@ public class Member extends BaseEntity  {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-//    @PrePersist
-//    private void prePersist() {
-//        if (getCreateBy() != null) {
-//            setCreateBy(getEmail());
-//        }
-//    }
-
-
     //화면에서 넘어오는 dto와  비번 암호화 객체를 이용하여 Member 엔터티 객체 생성하는 메소드
     public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {
         Member member = new Member();

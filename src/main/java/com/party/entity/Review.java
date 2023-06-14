@@ -10,27 +10,56 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "review_room")
-@Getter@Setter@ToString
-public class Review extends BaseEntity {
-    @Id
-    @Column(name = "review_room_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Entity
+    @Table(name = "review_room")
+    @Getter@Setter@ToString
+    public class Review extends BaseEntity {
+        @Id
+        @Column(name = "review_room_id")
+        @GeneratedValue(strategy = GenerationType.AUTO)
+        private Long id;
 
-    @Column(nullable = false,length = 50)
-    private String name;
+        @Column(nullable = false,length = 50)
+        private String name;
 
-    @Column(nullable = false,length = 50)
-    private String title;
+        @Column(nullable = false,length = 50)
+        private String title;
 
-    @Lob
-    @Column(nullable = false)
-    private String description;
+        @Lob
+        @Column(nullable = false)
+        private String description;
 
-    @Column(nullable = false)
-    private int rating;
+        @Column(nullable = false)
+        private String rating;
+
+
+
+//    @Enumerated(EnumType.STRING)
+//    private ReviewStatus reviewStatus;
+
+//    @Column(nullable = false)
+//    private String fit;
+//
+//    @Column(nullable = false)
+//    private Integer useTime;
+//
+//    @Column(nullable = false,name = "review_price")
+//    private Integer price;
+//
+
+//
+//    @Lob
+//    @Column(nullable = false)
+//    private String refund; // 환불 규정
+//
+//    @Lob
+//    @Column(nullable = false)
+//    private String guide; // 시설안내
+//
+//    @Lob
+//    @Column(nullable = false)
+//    private String address; // 주소 이용한 지도
+
 
 
 
@@ -38,7 +67,7 @@ public class Review extends BaseEntity {
         this.name=reviewFormDto.getName();
         this.title=reviewFormDto.getTitle();
         this.description= reviewFormDto.getDescription();
-        this.rating = reviewFormDto.getRating();
+        this.rating= reviewFormDto.getRating();
     }
 
     // Review 엔티티가 삭제될 때 해당 Review와 매핑되어 있는 모든 ReviewImage 엔티티도 함께 삭제됩니다.

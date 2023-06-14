@@ -40,6 +40,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom{
                                 review.rating
 
 
+
                         )
                 )
                 .from(reviewImage)
@@ -82,6 +83,7 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom{
                                         review.regdate,
                                         review.createBy,
                                         review.rating
+
 
                                 )
                         )

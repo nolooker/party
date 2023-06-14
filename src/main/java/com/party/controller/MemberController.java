@@ -23,14 +23,6 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
-
-
-
-
-
-
-
-
     @GetMapping(value = "/update/{id}")
     public String getUpdateForm(@PathVariable("id")Long id, Model model){
         Member member = memberService.SelectOne(id);
@@ -135,7 +127,6 @@ public class MemberController {
             // 예외가 발생한 경우 오류 처리 로직을 구현합니다.
             return "errorPage"; // 오류 페이지로 이동하거나 오류 메시지를 표시할 수 있습니다.
         }
-
 
     }
 

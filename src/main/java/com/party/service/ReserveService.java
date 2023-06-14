@@ -31,22 +31,26 @@ public class ReserveService {
 
 
     // email 정보와 주문 정보(ReserveDto)를 이용하여 주문 로직을 구합니다.
-    public synchronized Long reserve(ReserveDto reserveDto, String email){
+    public synchronized Long reserve(ReserveDto reserveDto, String email) {
         // 어떤 상품인가요?
         Product product = productRepository.findById(reserveDto.getProductId())
                 .orElseThrow(EntityNotFoundException::new);
-        Member member = memberRepository.findByEmail(email) ;
-        List<ReserveProduct> reserveProductList = new ArrayList<>() ;
-        ReserveProduct reserveProduct = ReserveProduct.createReserveProduct(product, reserveDto.getCount(),reserveDto.getStartTimeAsLocalDateTime(), reserveDto.getEndTimeAsLocalDateTime(),reserveDto.getPersonnel(),reserveDto.getReq());
+        Member member = memberRepository.findByEmail(email);
+        List<ReserveProduct> reserveProductList = new ArrayList<>();
+        ReserveProduct reserveProduct = ReserveProduct.createReserveProduct(
+                product, reserveDto.getCount(), reserveDto.getStartTimeAsLocalDateTime(), reserveDto.getEndTimeAsLocalDateTime(),
+                reserveDto.getPersonnel(), reserveDto.getReq());
         reserveProductList.add(reserveProduct);
 
         LocalDateTime startTime = reserveDto.getStartTimeAsLocalDateTime();
         LocalDateTime endTime = startTime.plusHours(reserveDto.getCount());
-        Integer personnel=reserveDto.getPersonnel();
-        String req=reserveDto.getReq();
 
 
-        Reserve reserve = Reserve.createreserve(member,product, reserveProductList,startTime,endTime,personnel,req) ;
+
+        Integer personnel = reserveDto.getPersonnel();
+        String req = reserveDto.getReq();
+
+        Reserve reserve = Reserve.createreserve(member, product, reserveProductList, startTime, endTime, personnel, req);
         reserve.setMember(member);
         reserve.setReserveProducts(reserveProductList);
         reserve.setStartTime(startTime);
@@ -54,9 +58,14 @@ public class ReserveService {
         reserve.setPersonnel(personnel);
         reserve.setReq(req);
         reserve.setCreateBy(product.getCreateBy());
-        reserveRepository.save(reserve) ;
+        reserveRepository.save(reserve);
         return reserve.getId();
     }
+
+
+
+
+
     private final ProductImageRepository productImageRepository ;
 
     public Page<ReserveHistDto> getReserveList(String email, Pageable pageable){
@@ -136,6 +145,9 @@ public class ReserveService {
     public List<Reserve> findAllReservationsWithMembersByCreateBy(String sessionId) {
         return reserveRepository.findAllReservationsWithMembersByCreateBy(sessionId);
     }
+
+
+
 
 
 

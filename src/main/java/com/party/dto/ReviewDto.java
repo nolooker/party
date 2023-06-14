@@ -14,6 +14,7 @@ public class ReviewDto {
     private String description; // 상세 설명
     private LocalDateTime regdate;
     private LocalDateTime updateDate;
+    private String rating;
 
    // private String fit;
    // private Integer useTime;

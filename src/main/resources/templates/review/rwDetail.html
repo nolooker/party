@@ -206,6 +206,7 @@
     <div  style="display: flex; flex-wrap: nowrap; overflow-x: auto;">
         <div th:each="reviewImage : ${review.reviewImageDtoList}" class="margin" >
 
+
             <img class="" th:if="${not #strings.isEmpty(reviewImage.imageUrl)}" th:src="${reviewImage.imageUrl}" width="300" height="300">
 
         </div>
@@ -241,7 +242,7 @@
 
     <div class="container01">
         <div class="container">
-            <h4 class="display-5">상품 상세 설명</h4>
+            <h4  class="display-5">상품 상세 설명</h4>
             <hr class="my-4">
             <p class="lead" th:text="${review.description}"></p>
         </div>

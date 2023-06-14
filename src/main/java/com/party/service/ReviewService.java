@@ -25,11 +25,12 @@ public class ReviewService {
 	private final ReviewImageRepository reviewImageRepository;
 
     // 이용 후기 등록
-    public Long saveReview(ReviewFormDto dto, List<MultipartFile> uploadedFile) throws Exception {
+    public Long saveReview(ReviewFormDto dto, List<MultipartFile> uploadedFile, String rating) throws Exception {
         Review review = dto.createReview();
+        review.setRating(rating); // 별점 설정
         reviewRepository.save(review);
 
-        //이용 후기에 들어가는 각 이미지들
+        // 이용 후기에 들어가는 각 이미지들
         for (int i = 0; i < uploadedFile.size(); i++) {
             ReviewImage reviewImage = new ReviewImage();
             reviewImage.setReview(review);

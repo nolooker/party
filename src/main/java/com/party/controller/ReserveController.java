@@ -58,6 +58,8 @@ public class ReserveController {
         return new ResponseEntity<Long>(reserveId, HttpStatus.OK);
     }
 
+
+
     @GetMapping(value = {"/reserves", "/reserves/{page}"})
     public String reserveHist(@PathVariable("page") Optional<Integer> page, Principal principal, Model model){
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 2) ;

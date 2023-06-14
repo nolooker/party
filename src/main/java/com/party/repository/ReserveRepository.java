@@ -29,15 +29,10 @@ public interface ReserveRepository extends JpaRepository<Reserve, Long> {
 
 
 
-
-
-
-
-
-
-
-
 }
+
+
+
 
 
 

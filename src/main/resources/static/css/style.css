@@ -139,6 +139,7 @@ p {
   margin-top: 0;
   margin-bottom: 1rem; }
 
+
 abbr[title],
 abbr[data-bs-original-title] {
   -webkit-text-decoration: underline dotted;
@@ -403,6 +404,11 @@ progress {
 
 [hidden] {
   display: none !important; }
+
+  .testimonial-slider .item .testimonial img {
+    height: 400px;
+    width: 400px;
+  }
 
 .lead {
   font-size: 1.25rem;
@@ -5657,6 +5663,7 @@ textarea.form-control-lg {
     margin-right: -0.5rem;
     margin-bottom: -0.5rem; }
 
+
 .offcanvas-title {
   margin-bottom: 0;
   line-height: 1.5; }
@@ -9217,7 +9224,7 @@ textarea.form-control-lg {
   position: absolute;
   top: 0;
   z-index: 9;
-  width: 100%; }
+  width: 131%; }
   .site-nav h1, .site-nav .h1 {
     margin: 0;
     padding: 0;
@@ -9669,8 +9676,8 @@ textarea {
   background-color: #ff416c;
   padding: 20px 30px;
   position: relative;
-  float: left;
-  width: 100%;
+  float: right;
+  width: 145%;
   border-radius: 7px;
   -webkit-box-shadow: 0 15px 30px -15px rgba(0, 0, 0, 0.1);
   box-shadow: 0 15px 30px -15px rgba(0, 0, 0, 0.1); }
@@ -9730,7 +9737,8 @@ textarea {
     background-color: #ff416c;
     padding-left: 30px;
     padding-right: 30px;
-    color: #fff; }
+    color: #fff;
+    white-space: nowrap}
     .hero .form-search .btn:hover, .hero .form-search .btn:focus {
       outline: none;
       -webkit-box-shadow: none;
@@ -9808,8 +9816,9 @@ textarea {
   -o-transition: .3s all ease;
   transition: .3s all ease; }
   .btn.btn-primary {
-    background: #ff416c;
-    color: #fff; }
+    background-image: linear-gradient(to right, #fc6076, #ff9a44, #ef9d43, #e75516);
+    box-shadow: 0 4px 15px 0 rgba(252, 104, 110, 0.75);
+    }
   .btn:hover {
     top: -2px;
     -webkit-box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);

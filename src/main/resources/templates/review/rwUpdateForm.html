@@ -91,6 +91,21 @@
         </div>
         <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="fieldError">Invalid Data</p>
 
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">별점</span>
+            </div>
+            <select th:field="*{rating}" class="form-control">
+                <option value="" selected>별점을 선택하세요</option>
+                <option value="★">★</option>
+                <option value="★★">★★</option>
+                <option value="★★★">★★★</option>
+                <option value="★★★★">★★★★</option>
+                <option value="★★★★★">★★★★★</option>
+            </select>
+        </div>
+        <p th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}" class="fieldError">Invalid Data</p>
+
 
 
         <div class="form-group" th:each="reviewImageDto, status: ${reviewFormDto.reviewImageDtoList}">

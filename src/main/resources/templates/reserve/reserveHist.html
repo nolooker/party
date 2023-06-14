@@ -84,17 +84,56 @@
 
 <div class="content" layout:fragment="content">
   <h2>주문 내역 페이지</h2>
-
+  <br/><br/>
   <div th:each="reserve : ${reserves.getContent()}">
+
+    <div class="card" style="display: flex;">
+      <div th:each="reserveProduct : ${reserve.reserveProductDtoList}" style="display: flex;">
+        <div class="repImgDiv">
+          <img th:src="${reserveProduct.imageUrl}" class="rounded repImg" th:alt="${reserveProduct.name}" style="flex-shrink: 0;">
+        </div>
+        <div class="align-self-center" style="margin-left: 10px;">
+          <span th:text="${reserveProduct.name}" class="fs24 font-weight-bold"></span>
+          <div class="fs18 font-weight-light">
+            <span th:text="${#numbers.formatInteger(reserveProduct.reservePrice, 0, 'COMMA')}"></span> 원
+            <span th:text="${reserveProduct.count} + '개'"></span>
+
+            <br/><br/>
+            <h4 th:text="' 주문날짜: '+ ${reserve.reserveDate} "></h4>
+            <h4 th:text="' 파티룸 사용 시간: '+ ${reserve.startTime}  "></h4>
+            <h4 th:text="' 파티룸 종료 시간: '+${reserve.endTime}  "></h4>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="align-self-center">
-      <h4 th:text="${reserve.reserveDate} + ' 주문날짜'"></h4>
-      <h4 th:text="${reserve.startTime} + ' 파티룸 사용 시간'"></h4>
-      <h4 th:text="${reserve.endTime} + ' 파티룸 종료 시간'"></h4>
+
       <th:block th:if="${reserve.reserveStatus == T(com.party.constant.ReserveStatus).ORDER}">
-        <button type="button" class="btn btn-online-secondary" th:value="${reserve.reserveId}"
+        <button type="button" class="btn btn-primary btn-lg" th:value="${reserve.reserveId}"
                 onclick="cancelReserve(this.value)">
           주문 취소
         </button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+
+        <button class="btn btn-primary btn-lg" onclick="requestPay()">결제하기</button>
+
+        <script>
+        const userCode = "imp14397622";
+        IMP.init(userCode);
+
+        function requestPay() {
+          IMP.request_pay({
+            pg: "html5_inicis",
+            pay_method: "card",
+            merchant_uid: "test_lishduca",
+            name: "테스트 결제",
+            amount: 100,
+            buyer_tel: "010-0000-0000",
+          });
+        }
+        </script>
+        <br/><br/>
       </th:block>
       <th:block th:unless="${reserve.reserveStatus == T(com.party.constant.ReserveStatus).ORDER}">
         <button type="button" class="btn btn-online-secondary" th:value="${reserve.reserveId}">
@@ -102,20 +141,7 @@
         </button>
       </th:block>
     </div>
-    <div class="card">
-      <div th:each="reserveProduct : ${reserve.reserveProductDtoList}">
-        <div class="repImgDiv">
-          <img th:src="${reserveProduct.imageUrl}" class="rounded repImg" th:alt="${reserveProduct.name}">
-        </div>
-        <div class="align-self-center">
-          <span th:text="${reserveProduct.name}" class="fs24 font-weight-bold"></span>
-          <div class="fs18 font-weight-light">
-            <span th:text="${#numbers.formatInteger(reserveProduct.reservePrice, 0, 'COMMA')}"></span> 원
-            <span th:text="${reserveProduct.count} + '개'"></span>
-          </div>
-        </div>
-      </div>
-    </div>
+
   </div>
 
   <div th:with="start=${(reserves.number/maxPage)*maxPage + 1}, end=(${(reserves.totalPages == 0) ? 1 : (start + (maxPage - 1) < reserves.totalPages ? start + (maxPage - 1) : reserves.totalPages)})" >

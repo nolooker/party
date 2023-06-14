@@ -45,7 +45,7 @@
     <div class="container">
       <div class="menu-bg-wrap">
         <div class="site-navigation">
-          <a href="/" class="logo m-0 float-start">PARTY</a>
+          <a href="/" class="logo m-0 float-start">SPACE PARTY</a>
 
           <ul
                   class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end"
@@ -72,7 +72,7 @@
 
             </li>
             <li class="nav-item" sec:authorize="isAuthenticated()">
-              <a class="nav-link" href="/reserves" sec:authorize="isAuthenticated()">주문 내역</a>
+              <a class="nav-link" href="/reserves" sec:authorize="hasAnyAuthority('ROLE_USER')">주문 내역</a>
             </li>
 
             <li class="has-children">
@@ -93,18 +93,15 @@
               <a >게시물</a>
               <ul class="dropdown">
                 <li><a href="/notice/list" sec:authorize="isAuthenticated()">공지 사항</a></li>
-                <li><a href="/notice/admin/list" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">(admin)공지사항</a></li>
-                <li><a href="/board/list">게시판</a></li>
-                <li><a href="/qna/list">Q&A</a></li>
-                <li><a href="#">이용 약관</a></li>
-                <li><a href="#">서비스 소개</a></li>
-                <li><a href="#">도움말</a></li>
+                <li><a href="/notice/admin/list" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">관리자 공지사항</a></li>
+                <li><a href="/board/list" sec:authorize="isAuthenticated()">게시판</a></li>
+                <li><a href="/board/admin/list" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">관리자 게시판</a></li>
               </ul>
             </li>
             <li class="has-children">
               <a >이용후기</a>
               <ul class="dropdown">
-                <li><a href="/review/new" >이용 후기 등록</a></li>
+                <li><a href="/review/new" sec:authorize="isAuthenticated()">이용 후기 등록</a></li>
                 <li><a href="/list/reviews" >이용 후기 목록</a></li>
               </ul>
             </li>
@@ -128,12 +125,20 @@
   <script src="/js/navbar.js"></script>
   <script src="/js/counter.js"></script>
   <script src="/js/custom.js"></script>
+  <!-- 사용자 스크립트 추가 -->
+  <th:block layout:fragment="script">
     <script>
-  (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l);}})();
+  (function(){var w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.");}
+  var ch=function(){ch.c(arguments);};ch.q=[];ch.c=function(args){ch.q.push(args);};w.ChannelIO=ch;function l()
+  {if(w.ChannelIOInitialized){return;}w.ChannelIOInitialized=true;var s=document.createElement("script");s.type="text/javascript";s.async=true;s
+  .src="https://cdn.channel.io/plugin/ch-plugin-web.js";var x=document
+  .getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x);}}if(document.readyState==="complete"){l();}else{w.addEventListener("DOMContentLoaded",l);w
+  .addEventListener("load",l);}})();
 
   ChannelIO('boot', {
     "pluginKey": "b15d299c-8293-4699-926f-1644eb7d248b"
   });
 </script>
+  </th:block>
 </div>
 </html>

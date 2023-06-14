@@ -11,6 +11,10 @@
 
         });
 
+         function showAlert() {
+    alert("탈퇴하시겠습니까?");
+  }
+
     </script>
 </th:block>
 
@@ -29,13 +33,13 @@
 
         <div class="input-group">
             <span class="input-group-text">이름</span>
-            <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력해주세요">
+            <input type="text" th:field="*{name}" disabled="disabled" class="form-control" placeholder="이름을 입력해주세요">
         </div>
         <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
 
         <div class="input-group">
             <span class="input-group-text">이메일</span>
-            <input type="text" th:field="*{email}" class="form-control" placeholder="이메일을 입력해주세요.">
+            <input type="text" th:field="*{email}" disabled="disabled" class="form-control" placeholder="이메일을 입력해주세요.">
         </div>
         <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError">Incorrect data</p>
 
@@ -57,10 +61,11 @@
         </div>
         <p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="fieldError">Incorrect data</p>
 
-
+        </br></br>
         <div style="text-align: center">
             <button th:formaction="@{/members/update}" type="submit" class="btn btn-primary">수정</button>
-            <button th:formaction="@{/members/delete/{id}(id=${session.User.id})}" type="submit" class="btn btn-primary">삭제</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button th:formaction="@{/members/delete/{id}(id=${session.User.id})}" type="submit" class="btn btn-primary" onclick="showAlert()">탈퇴</button>
 
 
 

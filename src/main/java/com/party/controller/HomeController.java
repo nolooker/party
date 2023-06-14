@@ -1,10 +1,9 @@
 package com.party.controller;
 
-import com.party.dto.MainProductDto;
-import com.party.dto.MemberDto;
-import com.party.dto.ProductSearchDto;
+import com.party.dto.*;
 import com.party.repository.MemberRepository;
 import com.party.service.ProductService;
+import com.party.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,9 +24,10 @@ public class HomeController {
 
     private final MemberRepository memberRepository;
     private final ProductService productService;
+    private final ReviewService reviewService;
 
     @RequestMapping(value = "/")
-    public String main(HttpSession session, ProductSearchDto dto, Optional<Integer> page, Model model) {
+    public String main(HttpSession session, ProductSearchDto dto, ReviewSearchDto dtoo, Optional<Integer> page, Model model) {
         String sessionId = "User";
         if (session.getAttribute(sessionId) == null) { // 세션 영역에 데이터가 없을 때만 세션에 바인딩 합니다.
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -57,8 +57,10 @@ public class HomeController {
         }
 
         Page<MainProductDto> products = productService.getMainProductPage(dto, pageable);
+        Page<MainReviewDto> reviews = reviewService.getMainReviewPage(dtoo, pageable);
 
         model.addAttribute("products", products);
+        model.addAttribute("reviews",reviews);
 
 
         return "main";

@@ -68,6 +68,23 @@
         </div>
         <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Invalid Data</p>
 
+
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">별점</span>
+            </div>
+            <select th:field="*{rating}" class="form-control">
+                <option value="" selected>별점을 선택하세요</option>
+                <option value="★">★</option>
+                <option value="★★">★★</option>
+                <option value="★★★">★★★</option>
+                <option value="★★★★">★★★★</option>
+                <option value="★★★★★">★★★★★</option>
+            </select>
+        </div>
+        <p th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}" class="fieldError">Invalid Data</p>
+
+
         <div class="input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text">제목</span>
@@ -96,28 +113,6 @@
 
         </div>
 
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">별점</span>
-            </div>
-            <div class="star-rating">
-                <input type="radio" id="1-star" name="rating" value="1" />
-                <label for="1-star" class="star">♥</label>
-
-                <input type="radio" id="2-stars" name="rating" value="2"/>
-                <label for="2-stars" class="star">♥♥</label>
-
-                <input type="radio" id="3-stars" name="rating" value="3"/>
-                <label for="3-stars" class="star">♥♥♥</label>
-
-                <input type="radio" id="4-stars" name="rating" value="4"/>
-                <label for="4-stars" class="star">♥♥♥♥</label>
-
-                <input type="radio" id="5-stars" name="rating" value="5"/>
-                <label for="5-stars" class="star pr-4">♥♥♥♥♥</label>
-
-            </div>
-        </div>
 
         <div style="text-align: center" th:if="${#strings.isEmpty(reviewFormDto.id)}">
             <button th:formaction="@{/review/new}" type="submit" class="btn btn-primary">이용후기 등록</button>

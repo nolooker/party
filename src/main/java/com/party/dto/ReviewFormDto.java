@@ -3,10 +3,10 @@ package com.party.dto;
 import com.party.entity.Review;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +22,12 @@ public class ReviewFormDto {
     private String title;
 
     @NotBlank(message = "후기 내용은 필수 입력 사항입니다.")
+    @Length(min = 10,max = 50,message = "후기 내용은 50자이상, 자 이하로 입력해 주세요")
     private String description;
 
-    @NotNull(message = "이용 후기를 하트로 알려주세요.")
-    private int rating;
+    @NotBlank(message = "별점은 필수 입력 사항입니다.")
+    private String rating;
+
 
 //    @NotBlank(message = "파티룸 수용인원은 필수 입력 사항입니다.")
 //    private String fit;
@@ -63,7 +65,4 @@ public class ReviewFormDto {
     }
 
 
-    public int getRating() {
-        return rating;
-    }
 }
